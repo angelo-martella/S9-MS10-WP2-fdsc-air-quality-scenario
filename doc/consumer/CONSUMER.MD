@@ -361,4 +361,4 @@ export USER_CREDENTIAL=$(./scripts/get_credential_for_consumer.sh http://keycloa
 helm uninstall consumer-dsc -n consumer
 ```
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)

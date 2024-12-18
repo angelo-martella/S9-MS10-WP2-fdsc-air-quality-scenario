@@ -520,4 +520,4 @@ curl -s -X GET 'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities
 helm uninstall provider-dsc -n provider
 ```
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)

@@ -166,4 +166,4 @@ watch kubectl get pods -n trust-anchor
 helm uninstall trust-anchor-dsc -n trust-anchor
 ```
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)
