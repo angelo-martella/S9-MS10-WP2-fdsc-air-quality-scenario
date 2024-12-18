@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>PROVIDER.MD</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///Users/cristian/Projects/data-space-connector/R%3A%5C2.Travail%5C1.Enseignement%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css"><link rel="stylesheet" href="file:///Users/cristian/Projects/data-space-connector/D%3A%5Crdaros%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="provider">Provider</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#provider">Provider</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#configuration-valuesyaml">Configuration values.yaml</a>
+<ul>
+<li><a href="#authentication">Authentication</a>
+<ul>
+<li><a href="#vcverifier">VCVerifier</a></li>
+<li><a href="#credentials-config-service">Credentials Config Service</a></li>
+<li><a href="#trusted-issuers-list">Trusted Issuers List</a></li>
+<li><a href="#mysql">MySql</a></li>
+</ul>
+</li>
+<li><a href="#authorization">Authorization</a>
+<ul>
+<li><a href="#apisix---pep">APISIX - PEP</a>
+<ul>
+<li><a href="#routes-configuration">Routes configuration</a></li>
+</ul>
+</li>
+<li><a href="#open-policy-agent-opa---pdp">Open Policy Agent (OPA) - PDP</a></li>
+<li><a href="#odrl-pap">ODRL-PAP</a></li>
+<li><a href="#postgres-database-for-odrl-pap">Postgres database for ODRL-PAP</a></li>
+<li><a href="#scorpio---data-service">Scorpio - Data Service</a></li>
+<li><a href="#postgis-database-for-scorpio">Postgis database for Scorpio</a></li>
+</ul>
+</li>
+<li><a href="#tmforum-api">TMForum API</a>
+<ul>
+<li><a href="#tmforum-apis-to-support-contracting">TMForum APIs to support contracting</a></li>
+<li><a href="#contract-management">Contract Management</a></li>
+</ul>
+</li>
+<li><a href="#data-space-config">Data Space Config</a></li>
+</ul>
+</li>
+<li><a href="#deployment-of-the-provider">Deployment of the Provider</a>
+<ul>
+<li><a href="#1-create-an-identity-for-the-provider">1. Create an identity for the provider</a></li>
+<li><a href="#2-create-provider-namespace">2. Create 'provider' namespace</a></li>
+<li><a href="#3-deploy-the-key-into-the-cluster">3. Deploy the key into the cluster</a></li>
+<li><a href="#4-install-the-provider">4. Install the provider</a></li>
+<li><a href="#5-register-the-provider-at-the-trust-anchor">5. Register the provider at the Trust Anchor</a></li>
+<li><a href="#6-configure-the-internal-trusted-issuers-list">6. Configure the internal Trusted Issuers List</a></li>
+<li><a href="#7-add-policies">7. Add policies</a></li>
+</ul>
+</li>
+<li><a href="#verify-that-the-provider-is-working-correctly">Verify that the provider is working correctly</a>
+<ul>
+<li><a href="#test-authorized-access">Test authorized access</a></li>
+</ul>
+</li>
+<li><a href="#uninstall">Uninstall</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>Includes <strong>authentication</strong> and <strong>authorization</strong> components to manage access to the data service it offers.</p>
+<p><img src="file:///Users/cristian/Projects/data-space-connector/docs/provider/img/01.png" alt="alt text"></p>
+<p><strong>Authentication</strong> services are registered and connected to the <strong>Verifiable Data Registry</strong> include:</p>
+<ul>
+<li>A <strong>Verifiable Credential Verifier (VCVerifier)</strong> that provides OID4VP endpoints</li>
+<li>A <em>internal</em> <strong>Trusted Issuers List</strong> (which differs from the global one managed by the Verifiable Data Registry) and a <strong>Credentials Config Service</strong>, to provide information about issuers and credentials for the verifier.</li>
+<li><strong>MySql</strong> acts as Storage Backend (can be a shared instance)</li>
+</ul>
+<p>Naturally, as per the consumer, identity and key material for the organization have to be created and registered.</p>
+<p><img src="file:///Users/cristian/Projects/data-space-connector/docs/provider/img/02.png" alt="alt text"></p>
+<p><strong>Authorization</strong> services enforce and manage policies through a combination of <strong>Policy Enforcement Point (PEP)</strong>, <strong>Policy Decision Point (PDP)</strong> and <strong>Policy Administration Point (PAP)</strong>. In particular:</p>
+<ul>
+<li>PEP and central entrypoint - <strong>APISIX Gateway</strong>: (a) routes <em>well-known/openid-configuration</em> from the Verifier, (b) routes <em>well-known/data-space-configuration</em> from a static fileserver and (c) checks <em>JWT</em> at the Verifier.</li>
+<li>PDP - <strong>Open Policy Agent</strong>, which is deployed as a sidecar of APISIX for better performance.</li>
+<li>PAP - <strong>ODRL-PAP</strong> for managing policies. In this case, <strong>Postgresql</strong> is used as storage backend.</li>
+<li>Data Service - <strong>Scorpio</strong>: it is NGSI-LD compliant and requires <strong>Postgis</strong> as storage backend.</li>
+</ul>
+<p><img src="file:///Users/cristian/Projects/data-space-connector/docs/provider/img/03.png" alt="alt text"></p>
+<p><strong>Data marketplace and contracting</strong> services are offered through <strong>TMForum API</strong> and <strong>Contract Management</strong>. In particular:</p>
+<ul>
+<li><strong>TMForum APIs</strong> offer marketplace and contracting functionalities, and rely on a <strong>NGSI-LD context broker</strong> instance as a storage backend.</li>
+<li>Contract Management is used to integrate TMForum with the Authentication of the Data Space Connector.</li>
+</ul>
+<p><img src="file:///Users/cristian/Projects/data-space-connector/docs/provider/img/04.png" alt="alt text"></p>
+<p>Eventually, <strong>Data Space Config</strong> acts as well-known endpoint, and allows to configure of the data space by specifying supported data models, authentication protocols, etc.</p>
+<h2 id="configuration-valuesyaml">Configuration values.yaml</h2>
+<h3 id="authentication">Authentication</h3>
+<h4 id="vcverifier">VCVerifier</h4>
+<pre class="hljs"><code><div><span class="hljs-attr">vcverifier:</span>
+  <span class="hljs-comment"># make the verifier publicly accessible</span>
+  <span class="hljs-attr">ingress:</span>
+    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">hosts:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">provider-verifier.127.0.0.1.nip.io</span>
+        <span class="hljs-attr">paths:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">"/"</span>
+  <span class="hljs-attr">deployment:</span>
+    <span class="hljs-attr">verifier:</span>
+      <span class="hljs-comment"># address of the trust anchor</span>
+      <span class="hljs-attr">tirAddress:</span> <span class="hljs-string">http://tir.127.0.0.1.nip.io:8080/</span>
+      <span class="hljs-attr">did:</span> <span class="hljs-string">did:key:&lt;PROVIDER-KEY&gt;</span>
+    <span class="hljs-comment"># public address of the verifier, to be provided as oid-config</span>
+    <span class="hljs-attr">server:</span>
+      <span class="hljs-attr">host:</span> <span class="hljs-string">http://provider-verifier.127.0.0.1.nip.io:8080</span>
+    <span class="hljs-comment"># access to the internal credentials-config-service</span>
+    <span class="hljs-attr">configRepo:</span>
+      <span class="hljs-attr">configEndpoint:</span> <span class="hljs-string">http://credentials-config-service:8080</span>
+</div></code></pre>
+<h4 id="credentials-config-service">Credentials Config Service</h4>
+<pre class="hljs"><code><div><span class="hljs-attr">credentials-config-service:</span>
+  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+</div></code></pre>
+<h4 id="trusted-issuers-list">Trusted Issuers List</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># internal trusted issuers list</span>
+<span class="hljs-attr">trusted-issuers-list:</span>
+  <span class="hljs-comment"># only open for demo purposes</span>
+  <span class="hljs-attr">ingress:</span>
+    <span class="hljs-attr">til:</span>
+      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">hosts:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">til-provider.127.0.0.1.nip.io</span>
+          <span class="hljs-attr">paths:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">/</span>
+</div></code></pre>
+<h4 id="mysql">MySql</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># mysql used for the credentials config service</span>
+<span class="hljs-attr">mysql:</span>
+  <span class="hljs-attr">primary:</span>
+    <span class="hljs-attr">persistence:</span>
+      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>      
+      <span class="hljs-comment"># use one of the classes provided by your cluster</span>
+      <span class="hljs-attr">storageClass:</span> <span class="hljs-string">local-path</span>
+</div></code></pre>
+<h3 id="authorization">Authorization</h3>
+<h4 id="apisix---pep">APISIX - PEP</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># -- apisix configuration</span>
+<span class="hljs-attr">apisix:</span>
+  <span class="hljs-attr">dataPlane:</span>
+    <span class="hljs-comment"># -- configure the ingress to the data service</span>
+    <span class="hljs-attr">ingress:</span>
+      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">hostname:</span> <span class="hljs-string">mp-data-service.127.0.0.1.nip.io</span> 
+  <span class="hljs-attr">catchAllRoute:</span>
+    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">false</span>
+  <span class="hljs-attr">routes:</span> <span class="hljs-string">&lt;ROUTES&gt;</span>
+</div></code></pre>
+<p>Configuration of ROUTES is broken down in the following.</p>
+<h5 id="routes-configuration">Routes configuration</h5>
+<p>Route to answer all openid-config requests to the data service from within the verifier</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">-</span> <span class="hljs-attr">uri:</span> <span class="hljs-string">/.well-known/openid-configuration</span>
+  <span class="hljs-attr">host:</span> <span class="hljs-string">mp-data-service.127.0.0.1.nip.io</span>
+  <span class="hljs-attr">upstream:</span>
+    <span class="hljs-attr">nodes:</span>
+      <span class="hljs-attr">verifier:3000:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">type:</span> <span class="hljs-string">roundrobin</span>
+  <span class="hljs-attr">plugins:</span>
+    <span class="hljs-attr">proxy-rewrite:</span>
+        <span class="hljs-attr">uri:</span> <span class="hljs-string">/services/data-service/.well-known/openid-configuration</span>
+</div></code></pre>
+<p>Route to provider data-space-configuration</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">-</span> <span class="hljs-attr">uri:</span> <span class="hljs-string">/.well-known/data-space-configuration</span>
+  <span class="hljs-attr">host:</span> <span class="hljs-string">mp-data-service.127.0.0.1.nip.io</span>
+  <span class="hljs-attr">upstream:</span>
+    <span class="hljs-attr">nodes:</span>
+      <span class="hljs-attr">dsconfig:3002:</span> <span class="hljs-number">1</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">roundrobin</span>
+  <span class="hljs-attr">plugins:</span>
+    <span class="hljs-attr">proxy-rewrite:</span>
+      <span class="hljs-attr">uri:</span> <span class="hljs-string">/.well-known/data-space-configuration/data-space-configuration.json</span>
+    <span class="hljs-attr">response-rewrite:</span>
+      <span class="hljs-attr">headers:</span>
+        <span class="hljs-attr">set:</span>
+          <span class="hljs-attr">content-type:</span> <span class="hljs-string">application/json</span>
+</div></code></pre>
+<p>Central route to the dataservice</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">-</span> <span class="hljs-attr">uri:</span> <span class="hljs-string">/*</span>
+  <span class="hljs-attr">host:</span> <span class="hljs-string">mp-data-service.127.0.0.1.nip.io</span>
+  <span class="hljs-attr">upstream:</span>
+    <span class="hljs-attr">nodes:</span>
+      <span class="hljs-attr">data-service-scorpio:9090:</span> <span class="hljs-number">1</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">roundrobin</span>
+  <span class="hljs-attr">plugins:</span>
+    <span class="hljs-comment"># verify the jwt at the verifiers endpoint</span>
+    <span class="hljs-attr">openid-connect:</span>
+      <span class="hljs-attr">bearer_only:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">use_jwks:</span> <span class="hljs-literal">true</span>
+      <span class="hljs-attr">client_id:</span> <span class="hljs-string">data-service</span>
+      <span class="hljs-attr">client_secret:</span> <span class="hljs-string">unused</span>
+      <span class="hljs-attr">ssl_verify:</span> <span class="hljs-literal">false</span>
+      <span class="hljs-attr">discovery:</span> <span class="hljs-string">http://verifier:3000/services/data-service/.well-known/openid-configuration</span>
+    <span class="hljs-comment"># request decisions at opa</span>
+    <span class="hljs-attr">opa:</span>
+      <span class="hljs-attr">host:</span> <span class="hljs-string">"http://localhost:8181"</span>
+      <span class="hljs-attr">policy:</span> <span class="hljs-string">policy/main</span>
+      <span class="hljs-attr">with_body:</span> <span class="hljs-literal">true</span>
+</div></code></pre>
+<h4 id="open-policy-agent-opa---pdp">Open Policy Agent (OPA) - PDP</h4>
+<p>The OPA is deployed as part of the connector (in particular, as sidecar of APISIX), fulfullig the role of PDP.</p>
+<pre class="hljs"><code><div><span class="hljs-attr">opa:</span>
+  <span class="hljs-comment"># -- should an opa sidecar be deployed to apisix</span>
+  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+</div></code></pre>
+<h4 id="odrl-pap">ODRL-PAP</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># policy administration point</span>
+<span class="hljs-attr">odrl-pap:</span>
+  <span class="hljs-attr">additonalEnvVars:</span>
+    <span class="hljs-comment"># needs to know the providers identity to </span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">GENERAL_ORGANIZATION_DID</span>
+      <span class="hljs-attr">value:</span> <span class="hljs-string">did:key:&lt;PROVIDER-KEY&gt;</span>
+  <span class="hljs-attr">ingress:</span>
+    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">hosts:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">pap-provider.127.0.0.1.nip.io</span>
+        <span class="hljs-attr">paths:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">"/"</span>
+</div></code></pre>
+<h4 id="postgres-database-for-odrl-pap">Postgres database for ODRL-PAP</h4>
+<pre class="hljs"><code><div><span class="hljs-attr">postgresql:</span>
+  <span class="hljs-attr">primary:</span>
+    <span class="hljs-attr">persistence:</span>
+      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>      
+      <span class="hljs-comment"># use one of the classes provided by your cluster</span>
+      <span class="hljs-attr">storageClass:</span> <span class="hljs-string">local-path</span>
+</div></code></pre>
+<h4 id="scorpio---data-service">Scorpio - Data Service</h4>
+<pre class="hljs"><code><div><span class="hljs-attr">scorpio:</span>
+  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+
+  <span class="hljs-comment"># configuration for the dataservice at the credentials-config-service</span>
+  <span class="hljs-attr">ccs:</span>
+    <span class="hljs-attr">defaultOidcScope:</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">default</span>
+    <span class="hljs-attr">oidcScopes:</span>
+      <span class="hljs-attr">default:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">UserCredential</span>
+          <span class="hljs-attr">trustedParticipantsLists:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">http://tir.trust-anchor.svc.cluster.local:8080</span>
+          <span class="hljs-attr">trustedIssuersLists:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">http://trusted-issuers-list:8080</span>
+      <span class="hljs-attr">operator:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">OperatorCredential</span>
+          <span class="hljs-attr">trustedParticipantsLists:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">http://tir.trust-anchor.svc.cluster.local:8080</span>
+          <span class="hljs-attr">trustedIssuersLists:</span>
+            <span class="hljs-bullet">-</span> <span class="hljs-string">http://trusted-issuers-list:8080</span>
+</div></code></pre>
+<h4 id="postgis-database-for-scorpio">Postgis database for Scorpio</h4>
+<pre class="hljs"><code><div><span class="hljs-attr">postgis:</span>
+  <span class="hljs-attr">primary:</span>
+    <span class="hljs-attr">persistence:</span>
+      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>      
+      <span class="hljs-comment"># use one of the classes provided by your cluster</span>
+      <span class="hljs-attr">storageClass:</span> <span class="hljs-string">local-path</span>
+</div></code></pre>
+<h3 id="tmforum-api">TMForum API</h3>
+<h4 id="tmforum-apis-to-support-contracting">TMForum APIs to support contracting</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># tmforum apis to support contracting</span>
+<span class="hljs-attr">tm-forum-api:</span>
+  <span class="hljs-attr">ingress:</span>
+    <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">hosts:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">host:</span> <span class="hljs-string">tm-forum-api.127.0.0.1.nip.io</span>
+        <span class="hljs-attr">paths:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-string">/</span>
+</div></code></pre>
+<h4 id="contract-management">Contract Management</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># contract management component and the credential type it should register for a bought service</span>
+<span class="hljs-attr">contract-management:</span>
+  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+</div></code></pre>
+<h3 id="data-space-config">Data Space Config</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># serves configuration of the dataspace</span>
+<span class="hljs-attr">dataSpaceConfig:</span>
+  <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+  
+  <span class="hljs-comment">## Defaults</span>
+  <span class="hljs-attr">serviceType:</span> <span class="hljs-string">ClusterIP</span>
+  <span class="hljs-attr">port:</span> <span class="hljs-number">3002</span>
+  <span class="hljs-attr">supportedModels:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">"https://raw.githubusercontent.com/smart-data-models/dataModel.Consumption/master/ConsumptionPoint/schema.json"</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">"https://raw.githubusercontent.com/smart-data-models/dataModel.Consumption/master/ConsumptionCost/schema.json"</span>
+  <span class="hljs-attr">supportedProtocols:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">http</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">https</span>
+  <span class="hljs-attr">authenticationProtocols:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">oid4vp</span>
+</div></code></pre>
+<h2 id="deployment-of-the-provider">Deployment of the Provider</h2>
+<h3 id="1-create-an-identity-for-the-provider">1. Create an identity for the provider</h3>
+<p>1.1 Create a folder for the provider identity material</p>
+<pre class="hljs"><code><div>mkdir provider-identity
+</div></code></pre>
+<p>1.2 Generate the <strong>private key</strong> - do not get confused about the curve: openssl uses the name <code>prime256v1</code> for <code>secp256r1</code>(as defined by P-256)</p>
+<pre class="hljs"><code><div>openssl ecparam -name prime256v1 -genkey -noout -out provider-identity/private-key.pem
+</div></code></pre>
+<p>1.3 Generate corresponding <strong>public key</strong></p>
+<pre class="hljs"><code><div>openssl ec -<span class="hljs-keyword">in</span> provider-identity/private-key.pem -pubout -out provider-identity/public-key.pem
+</div></code></pre>
+<p>1.4 Create a <strong>(self-signed) certificate</strong></p>
+<pre class="hljs"><code><div>openssl req -new -x509 -key provider-identity/private-key.pem -out provider-identity/cert.pem -days 360
+</div></code></pre>
+<p>1.5 Export the <strong>keystore</strong></p>
+<pre class="hljs"><code><div>openssl pkcs12 -<span class="hljs-built_in">export</span> -inkey provider-identity/private-key.pem -<span class="hljs-keyword">in</span> provider-identity/cert.pem -out provider-identity/cert.pfx -name didPrivateKey
+</div></code></pre>
+<p>1.6 Check the contents</p>
+<pre class="hljs"><code><div>keytool -v -keystore provider-identity/cert.pfx -list -<span class="hljs-built_in">alias</span> didPrivateKey
+</div></code></pre>
+<p>1.7 Generate <strong>DID</strong> from the keystore</p>
+<pre class="hljs"><code><div>wget https://github.com/wistefan/did-helper/releases/download/0.1.1/did-helper
+
+chmod +x did-helper
+
+./did-helper -keystorePath ./provider-identity/cert.pfx -keystorePassword=<span class="hljs-built_in">test</span>
+</div></code></pre>
+<h3 id="2-create-provider-namespace">2. Create 'provider' namespace</h3>
+<pre class="hljs"><code><div>kubectl create namespace provider
+</div></code></pre>
+<h3 id="3-deploy-the-key-into-the-cluster">3. Deploy the key into the cluster</h3>
+<pre class="hljs"><code><div>kubectl create secret generic provider-identity --from-file=provider-identity/cert.pfx -n provider
+</div></code></pre>
+<h3 id="4-install-the-provider">4. Install the provider</h3>
+<pre class="hljs"><code><div>helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
+
+watch kubectl get pods -n provider
+</div></code></pre>
+<h3 id="5-register-the-provider-at-the-trust-anchor">5. Register the provider at the Trust Anchor</h3>
+<pre class="hljs"><code><div>curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
+--header <span class="hljs-string">'Content-Type: application/json'</span> \
+--data <span class="hljs-string">'{
+    "did": "did:key:&lt;PROVIDER-KEY&gt;",
+    "credentials": []
+}'</span>
+</div></code></pre>
+<h3 id="6-configure-the-internal-trusted-issuers-list">6. Configure the internal Trusted Issuers List</h3>
+<pre class="hljs"><code><div>curl -X POST http://til-provider.127.0.0.1.nip.io:8080/issuer \
+--header <span class="hljs-string">'Content-Type: application/json'</span> \
+--data <span class="hljs-string">'{
+  "did": "did:key:&lt;PROVIDER-KEY&gt;",
+  "credentials": [
+    {
+      "credentialsType": "OperatorCredential"
+    }
+  ]
+}'</span>
+</div></code></pre>
+<h3 id="7-add-policies">7. Add policies</h3>
+<pre class="hljs"><code><div>curl -s -X <span class="hljs-string">'POST'</span> http://pap-provider.127.0.0.1.nip.io:8080/policy \
+-H <span class="hljs-string">'Content-Type: application/json'</span> \
+-d  <span class="hljs-string">'{ 
+        "@context": {
+          "dc": "http://purl.org/dc/elements/1.1/",
+          "dct": "http://purl.org/dc/terms/",
+          "owl": "http://www.w3.org/2002/07/owl#",
+          "odrl": "http://www.w3.org/ns/odrl/2/",
+          "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+          "skos": "http://www.w3.org/2004/02/skos/core#"
+        },
+        "@id": "https://mp-operation.org/policy/common/type",
+        "@type": "odrl:Policy",
+        "odrl:permission": {
+          "odrl:assigner": {
+            "@id": "https://www.mp-operation.org/"
+          },
+          "odrl:target": {
+            "@type": "odrl:AssetCollection",
+            "odrl:source": "urn:asset",
+            "odrl:refinement": [
+              {
+                "@type": "odrl:Constraint",
+                "odrl:leftOperand": "ngsi-ld:entityType",
+                "odrl:operator": {
+                  "@id": "odrl:eq"
+                },
+                "odrl:rightOperand": "&lt;ENTITY-TYPE&gt;"
+              }
+            ]
+          },
+          "odrl:assignee": {
+            "@id": "vc:any"
+          },
+          "odrl:action": {
+            "@id": "odrl:read"
+          }
+        }
+      }'</span>
+</div></code></pre>
+<p>ENERGY-TYPE can be any entity type, such as <em>EnergyReport</em>.</p>
+<h2 id="verify-that-the-provider-is-working-correctly">Verify that the provider is working correctly</h2>
+<p>Get dataspace config:</p>
+<pre class="hljs"><code><div>curl http://mp-data-service.127.0.0.1.nip.io:8080/.well-known/data-space-configuration
+</div></code></pre>
+<p>Get the openid-config:</p>
+<pre class="hljs"><code><div>curl http://mp-data-service.127.0.0.1.nip.io:8080/.well-known/openid-configuration
+</div></code></pre>
+<p>Check that <strong>unauthorized access</strong> is not allowed:</p>
+<pre class="hljs"><code><div>curl -s -X GET <span class="hljs-string">'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities'</span>
+</div></code></pre>
+<h3 id="test-authorized-access">Test authorized access</h3>
+<ol>
+<li>
+<p>Prepare wallet identity</p>
+<pre class="hljs"><code><div>mkdir wallet-identity
+
+chmod o+rw wallet-identity
+
+docker run -v $(<span class="hljs-built_in">pwd</span>)/:/cert quay.io/wi_stefan/did-helper:0.1.1
+</div></code></pre>
+</li>
+<li>
+<p>Get an access token for the consumer:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">export</span> ACCESS_TOKEN=$(./scripts/get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 <span class="hljs-variable">$USER_CREDENTIAL</span> operator); <span class="hljs-built_in">echo</span> <span class="hljs-variable">$ACCESS_TOKEN</span>
+</div></code></pre>
+</li>
+<li>
+<p>Access the data service:</p>
+<pre class="hljs"><code><div>curl -s -X GET <span class="hljs-string">'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities?type=EnergyReport'</span> \
+--header <span class="hljs-string">'Accept: application/json'</span> \
+--header <span class="hljs-string">"Authorization: Bearer <span class="hljs-variable">${ACCESS_TOKEN}</span>"</span>
+</div></code></pre>
+</li>
+</ol>
+<h2 id="uninstall">Uninstall</h2>
+<pre class="hljs"><code><div>helm uninstall provider-dsc -n provider
+</div></code></pre>
+<p><a href="../README.MD">Return to index</a></p>
+
+</body>
+
+</html>
