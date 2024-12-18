@@ -1,10 +1,10 @@
 # FIWARE Data Space Connector technical docs
 
-[Trust Anchor](trust-anchor/TRUST-ANCHOR.MD)
+[Trust Anchor](doc/trust-anchor/TRUST-ANCHOR.MD)
 
-[Data Consumer](consumer/CONSUMER.MD)
+[Data Consumer](doc/consumer/CONSUMER.MD)
 
-[Data Provider](provider/PROVIDER.MD)
+[Data Provider](doc/provider/PROVIDER.MD)
 
 ## Setup k3s cluster
 
