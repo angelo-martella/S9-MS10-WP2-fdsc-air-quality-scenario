@@ -10,7 +10,7 @@
       - [VCVerifier](#vcverifier)
       - [Credentials Config Service](#credentials-config-service)
       - [Trusted Issuers List](#trusted-issuers-list)
-      - [MySql](#mysql)
+      - [MySql database for TIL](#mysql-database-for-til)
     - [Authorization](#authorization)
       - [APISIX - PEP](#apisix---pep)
         - [Routes configuration](#routes-configuration)
@@ -23,15 +23,19 @@
       - [TMForum APIs to support contracting](#tmforum-apis-to-support-contracting)
       - [Contract Management](#contract-management)
     - [Data Space Config](#data-space-config)
+    - [Excluded services](#excluded-services)
+      - [Keycloak](#keycloak)
   - [Deployment of the Provider](#deployment-of-the-provider)
     - [1. Create an identity for the provider](#1-create-an-identity-for-the-provider)
-    - [2. Create 'provider' namespace](#2-create-provider-namespace)
-    - [3. Deploy the key into the cluster](#3-deploy-the-key-into-the-cluster)
-    - [4. Install the provider](#4-install-the-provider)
-    - [5. Register the provider at the Trust Anchor](#5-register-the-provider-at-the-trust-anchor)
-    - [6. Configure the internal Trusted Issuers List](#6-configure-the-internal-trusted-issuers-list)
-    - [7. Add policies](#7-add-policies)
+    - [2. Replace PROVIDER\_DID in values.yaml with generated DID](#2-replace-provider_did-in-valuesyaml-with-generated-did)
+    - [3. Create 'provider' namespace](#3-create-provider-namespace)
+    - [4. Deploy the key into the cluster](#4-deploy-the-key-into-the-cluster)
+    - [5. Install the provider](#5-install-the-provider)
+    - [6. Register the provider at the Trust Anchor](#6-register-the-provider-at-the-trust-anchor)
+    - [7. Configure the internal Trusted Issuers List](#7-configure-the-internal-trusted-issuers-list)
+    - [8. Add policies](#8-add-policies)
   - [Verify that the provider is working correctly](#verify-that-the-provider-is-working-correctly)
+    - [Test unauthorized access](#test-unauthorized-access)
     - [Test authorized access](#test-authorized-access)
   - [Uninstall](#uninstall)
 
@@ -119,7 +123,7 @@ trusted-issuers-list:
             - /
 ```
 
-#### MySql
+#### MySql database for TIL
 
 ```yaml
 # mysql used for the credentials config service
@@ -160,7 +164,7 @@ Route to answer all openid-config requests to the data service from within the v
   upstream:
     nodes:
       verifier:3000: 1
-  type: roundrobin
+    type: roundrobin
   plugins:
     proxy-rewrite:
         uri: /services/data-service/.well-known/openid-configuration
@@ -326,6 +330,17 @@ dataSpaceConfig:
     - oid4vp
 ```
 
+### Excluded services
+
+#### Keycloak
+
+Issuance of verifiable credentials is not required in this case
+
+```yaml
+keycloak:
+  enabled: false
+```
+
 ## Deployment of the Provider
 
 ### 1. Create an identity for the provider
@@ -356,6 +371,8 @@ openssl req -new -x509 -key provider-identity/private-key.pem -out provider-iden
 
 1.5 Export the **keystore**
 
+Tip: use `test` as keystore password.
+
 ```bash
 openssl pkcs12 -export -inkey provider-identity/private-key.pem -in provider-identity/cert.pem -out provider-identity/cert.pfx -name didPrivateKey
 ```
@@ -373,30 +390,32 @@ wget https://github.com/wistefan/did-helper/releases/download/0.1.1/did-helper
 
 chmod +x did-helper
 
-./did-helper -keystorePath ./provider-identity/cert.pfx -keystorePassword=test
+./did-helper -keystorePath ./provider-identity/cert.pfx -keystorePassword=test | grep -o 'did:key:.*' > provider-identity/did.key
 ```
 
-### 2. Create 'provider' namespace
+### 2. Replace PROVIDER_DID in values.yaml with generated DID
+
+### 3. Create 'provider' namespace
 
 ```bash
 kubectl create namespace provider
 ```
 
-### 3. Deploy the key into the cluster
+### 4. Deploy the key into the cluster
 
 ```bash
 kubectl create secret generic provider-identity --from-file=provider-identity/cert.pfx -n provider
 ```
 
-### 4. Install the provider
+### 5. Install the provider
 
 ```bash
-helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
+helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f values.yaml --namespace=provider
 
 watch kubectl get pods -n provider
 ```
 
-### 5. Register the provider at the Trust Anchor
+### 6. Register the provider at the Trust Anchor
 
 ```bash
 curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
@@ -407,7 +426,7 @@ curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
 }'
 ```
 
-### 6. Configure the internal Trusted Issuers List
+### 7. Configure the internal Trusted Issuers List
 
 ```bash
 curl -X POST http://til-provider.127.0.0.1.nip.io:8080/issuer \
@@ -422,7 +441,7 @@ curl -X POST http://til-provider.127.0.0.1.nip.io:8080/issuer \
 }'
 ```
 
-### 7. Add policies
+### 8. Add policies
 
 ```bash
 curl -s -X 'POST' http://pap-provider.127.0.0.1.nip.io:8080/policy \
@@ -466,11 +485,11 @@ curl -s -X 'POST' http://pap-provider.127.0.0.1.nip.io:8080/policy \
       }'
 ```
 
-ENERGY-TYPE can be any entity type, such as _EnergyReport_.
+ENTITY-TYPE can be any entity type, such as _EnergyReport_.
 
 ## Verify that the provider is working correctly
 
-Get dataspace config:
+Get data space config:
 
 ```bash
 curl http://mp-data-service.127.0.0.1.nip.io:8080/.well-known/data-space-configuration
@@ -482,6 +501,8 @@ Get the openid-config:
 curl http://mp-data-service.127.0.0.1.nip.io:8080/.well-known/openid-configuration
 ```
 
+### Test unauthorized access
+
 Check that **unauthorized access** is not allowed:
 
 ```bash
@@ -490,14 +511,16 @@ curl -s -X GET 'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities
 
 ### Test authorized access
 
-1. Prepare wallet identity
+1. Prepare wallet identity (identity of the user that acts on behalf of the consumer)
 
     ```bash
     mkdir wallet-identity
 
     chmod o+rw wallet-identity
 
-    docker run -v $(pwd)/:/cert quay.io/wi_stefan/did-helper:0.1.1
+    docker run -v $(pwd)/wallet-identity:/cert quay.io/wi_stefan/did-helper:0.1.1 | grep -o 'did:key:.*' > wallet-identity/did.key
+
+    chmod o+rw wallet-identity/private-key.pem
     ```
 
 2. Get an access token for the consumer:
@@ -520,4 +543,4 @@ curl -s -X GET 'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities
 helm uninstall provider-dsc -n provider
 ```
 
-[Return to index](../../README.MD)
+[Return to index](../README.MD)

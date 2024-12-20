@@ -9,11 +9,23 @@
     - [Postgresql](#postgresql)
     - [Keycloak](#keycloak)
       - [Keycloak Realm configuration](#keycloak-realm-configuration)
+    - [Excluded services](#excluded-services)
+      - [VCVerifier](#vcverifier)
+      - [Credentials Config Service](#credentials-config-service)
+      - [Trusted Issuers List](#trusted-issuers-list)
+      - [MySql database for TIL](#mysql-database-for-til)
+      - [ODRL-PAP](#odrl-pap)
+      - [APISIX - PEP](#apisix---pep)
+      - [Scorpio - Data Service](#scorpio---data-service)
+      - [Postgis database for Scorpio](#postgis-database-for-scorpio)
+      - [TMForum APIs to support contracting](#tmforum-apis-to-support-contracting)
+      - [Contract Management](#contract-management)
   - [Deployment of the Consumer](#deployment-of-the-consumer)
     - [1. Create an identity for the consumer](#1-create-an-identity-for-the-consumer)
-    - [2. Create 'consumer' namespace](#2-create-consumer-namespace)
-    - [3. Deploy the key into the cluster](#3-deploy-the-key-into-the-cluster)
-    - [4. Install the consumer](#4-install-the-consumer)
+    - [2. Replace CONSUMER\_DID in values.yaml with generated DID](#2-replace-consumer_did-in-valuesyaml-with-generated-did)
+    - [3. Create 'consumer' namespace](#3-create-consumer-namespace)
+    - [4. Deploy the key into the cluster](#4-deploy-the-key-into-the-cluster)
+    - [5. Install the consumer](#5-install-the-consumer)
     - [5. Register the consumer at the Trust Anchor](#5-register-the-consumer-at-the-trust-anchor)
     - [6. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers](#6-verify-that-the-consumer-has-been-registered-correctly-by-querying-the-trust-anchors-til-api-to-fetch-the-list-of-the-issuers)
   - [Verify that the consumer is working correctly](#verify-that-the-consumer-is-working-correctly)
@@ -256,6 +268,98 @@ keycloak:
     }
     ```
 
+### Excluded services
+
+#### VCVerifier
+
+No APIs offered, thus no authentication framework required
+
+```yaml
+vcverifier:
+  enabled: false
+```
+
+#### Credentials Config Service
+
+No verifier deployed, thus no supporting services required
+
+```yaml
+credentials-config-service:
+  enabled: false
+```
+
+#### Trusted Issuers List
+
+No verifier deployed, thus no supporting services required
+
+```yaml
+trusted-issuers-list:
+  enabled: false
+```
+
+#### MySql database for TIL
+
+No trusted-issuers-list deployed, thus no db for it required
+
+```yaml
+mysql:
+  enabled: false
+```
+
+#### ODRL-PAP
+
+No apis offered, thus no policy administration required
+
+```yaml
+odrl-pap:
+  enabled: false
+```
+
+#### APISIX - PEP
+
+No apis offered, thus no policy enforcement required
+
+```yaml
+apisix:
+  enabled: false
+```
+
+#### Scorpio - Data Service
+
+Nothing offered, thus no broker
+
+```yaml
+scorpio:
+  enabled: false
+```
+
+#### Postgis database for Scorpio
+
+No scorpio, thus no db for it
+
+```yaml
+postgis:
+  enabled: false
+```
+
+#### TMForum APIs to support contracting
+
+Nothing offered, thus no api to offer something required
+
+```yaml
+tm-forum-api:
+  enabled: false
+```
+
+#### Contract Management
+
+Nothing offered, thus no contracts need to be managed
+
+```yaml
+contract-management:
+  enabled: false
+```
+
 ## Deployment of the Consumer
 
 ### 1. Create an identity for the consumer
@@ -286,6 +390,8 @@ openssl req -new -x509 -key consumer-identity/private-key.pem -out consumer-iden
 
 1.5 Export the **keystore**
 
+Tip: use `test` as keystore password.
+
 ```bash
 openssl pkcs12 -export -inkey consumer-identity/private-key.pem -in consumer-identity/cert.pem -out consumer-identity/cert.pfx -name didPrivateKey
 ```
@@ -303,25 +409,27 @@ wget https://github.com/wistefan/did-helper/releases/download/0.1.1/did-helper
 
 chmod +x did-helper
 
-./did-helper -keystorePath ./consumer-identity/cert.pfx -keystorePassword=test
+./did-helper -keystorePath ./consumer-identity/cert.pfx -keystorePassword=test | grep -o 'did:key:.*' > consumer-identity/did.key
 ```
 
-### 2. Create 'consumer' namespace
+### 2. Replace CONSUMER_DID in values.yaml with generated DID
+
+### 3. Create 'consumer' namespace
 
 ```bash
 kubectl create namespace consumer
 ```
 
-### 3. Deploy the key into the cluster
+### 4. Deploy the key into the cluster
 
 ```bash
 kubectl create secret generic consumer-identity --from-file=consumer-identity/cert.pfx -n consumer
 ```
 
-### 4. Install the consumer
+### 5. Install the consumer
 
 ```bash
-helm install consumer-dsc data-space-connector/data-space-connector --version 7.17.0 -f consumer/values.yaml --namespace=consumer
+helm install consumer-dsc data-space-connector/data-space-connector --version 7.17.0 -f values.yaml --namespace=consumer
 
 watch kubectl get pods -n consumer
 ```
@@ -361,4 +469,4 @@ export USER_CREDENTIAL=$(./scripts/get_credential_for_consumer.sh http://keycloa
 helm uninstall consumer-dsc -n consumer
 ```
 
-[Return to index](../../README.MD)
+[Return to index](../README.MD)

@@ -1,0 +1,202 @@
+## Authentication Services
+
+# -- Verifiable Credentials Verifier
+vcverifier:
+  # make the verifier publicly accessible
+  ingress:
+    enabled: true
+    hosts:
+      - host: provider-verifier.127.0.0.1.nip.io
+        paths:
+          - "/"
+  deployment:
+    verifier:
+      # address of the trust anchor
+      tirAddress: http://tir.127.0.0.1.nip.io:8080/
+      did: did:key:zDnaey6tXRtkBwv9yxkeqxhHTaEBnGqscpNDnTZSRP1jQ3mcW
+    # public address of the verifier, to be provided as oid-config
+    server:
+      host: http://provider-verifier.127.0.0.1.nip.io:8080
+    # access to the internal credentials-config-service
+    configRepo:
+      configEndpoint: http://credentials-config-service:8080
+
+
+# -- Credentials Config Service
+credentials-config-service:
+  enabled: true
+
+# -- Trusted Issuers List
+trusted-issuers-list:
+  # only open for demo purposes
+  ingress:
+    til:
+      enabled: true
+      hosts:
+        - host: til-provider.127.0.0.1.nip.io
+          paths:
+            - /
+
+# -- MySql database for TIL
+mysql:
+  primary:
+    persistence:
+      enabled: true      
+      # use one of the classes provided by your cluster
+      storageClass: local-path
+
+
+## Authorization Services
+
+# -- APISIX - PEP
+# -- apisix configuration
+apisix:
+  dataPlane:
+    # -- configure the ingress to the data service
+    ingress:
+      enabled: true
+      hostname: mp-data-service.127.0.0.1.nip.io 
+  catchAllRoute:
+    enabled: false
+  routes: |-
+    - uri: /.well-known/openid-configuration
+      host: mp-data-service.127.0.0.1.nip.io
+      upstream:
+        nodes:
+          verifier:3000: 1
+        type: roundrobin
+      plugins:
+        proxy-rewrite:
+            uri: /services/data-service/.well-known/openid-configuration
+    
+    - uri: /.well-known/data-space-configuration
+      host: mp-data-service.127.0.0.1.nip.io
+      upstream:
+        nodes:
+          dsconfig:3002: 1
+        type: roundrobin
+      plugins:
+        proxy-rewrite:
+          uri: /.well-known/data-space-configuration/data-space-configuration.json
+        response-rewrite:
+          headers:
+            set:
+              content-type: application/json
+    
+    - uri: /*
+      host: mp-data-service.127.0.0.1.nip.io
+      upstream:
+        nodes:
+          data-service-scorpio:9090: 1
+        type: roundrobin
+      plugins:
+        # verify the jwt at the verifiers endpoint
+        openid-connect:
+          bearer_only: true
+          use_jwks: true
+          client_id: data-service
+          client_secret: unused
+          ssl_verify: false
+          discovery: http://verifier:3000/services/data-service/.well-known/openid-configuration
+        # request decisions at opa
+        opa:
+          host: "http://localhost:8181"
+          policy: policy/main
+          with_body: true
+
+# -- Open Policy Agent - PDP
+opa:
+  # -- should an opa sidecar be deployed to apisix
+  enabled: true
+
+# -- ODRL-PAP
+odrl-pap:
+  additonalEnvVars:
+    # needs to know the providers identity to 
+    - name: GENERAL_ORGANIZATION_DID
+      value: did:key:zDnaey6tXRtkBwv9yxkeqxhHTaEBnGqscpNDnTZSRP1jQ3mcW
+  ingress:
+    enabled: true
+    hosts:
+      - host: pap-provider.127.0.0.1.nip.io
+        paths:
+          - "/"
+
+# -- Postgres datanase for ODRL-PAP
+postgresql:
+  primary:
+    persistence:
+      enabled: true      
+      # use one of the classes provided by your cluster
+      storageClass: local-path
+
+# -- Scorpio - Data Service
+scorpio:
+  enabled: true
+
+  # configuration for the dataservice at the credentials-config-service
+  ccs:
+    defaultOidcScope:
+      name: default
+    oidcScopes:
+      default:
+        - type: UserCredential
+          trustedParticipantsLists:
+            - http://tir.trust-anchor.svc.cluster.local:8080
+          trustedIssuersLists:
+            - http://trusted-issuers-list:8080
+      operator:
+        - type: OperatorCredential
+          trustedParticipantsLists:
+            - http://tir.trust-anchor.svc.cluster.local:8080
+          trustedIssuersLists:
+            - http://trusted-issuers-list:8080
+
+# -- Postgis database for Scorpio
+postgis:
+  primary:
+    persistence:
+      enabled: true      
+      # use one of the classes provided by your cluster
+      storageClass: local-path
+
+
+## TMForumAPI Services
+
+# -- TMForum APIs to support contracting
+tm-forum-api:
+  ingress:
+    enabled: true
+    hosts:
+      - host: tm-forum-api.127.0.0.1.nip.io
+        paths:
+          - /
+
+# -- Contract Management
+# contract management component and the credential type it should register for a bought service
+contract-management:
+  enabled: true
+
+## Data Space Config Service
+# serves configuration of the dataspace
+dataSpaceConfig:
+  enabled: true
+  
+  ## Defaults
+  serviceType: ClusterIP
+  port: 3002
+  supportedModels:
+    - "https://raw.githubusercontent.com/smart-data-models/dataModel.Consumption/master/ConsumptionPoint/schema.json"
+    - "https://raw.githubusercontent.com/smart-data-models/dataModel.Consumption/master/ConsumptionCost/schema.json"
+  supportedProtocols:
+    - http
+    - https
+  authenticationProtocols:
+    - oid4vp
+
+
+## Excluded services
+
+# -- Credentials issuance is not required in this case
+keycloak:
+  enabled: false
