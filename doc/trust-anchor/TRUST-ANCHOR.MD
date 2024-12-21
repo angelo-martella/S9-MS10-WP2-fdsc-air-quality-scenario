@@ -8,14 +8,18 @@
   - [Configuration values.yaml](#configuration-valuesyaml)
     - [MySql](#mysql)
     - [Trusted Issuers List](#trusted-issuers-list)
-      - [Use TIL API to register a participant to the Trust Anchor](#use-til-api-to-register-a-participant-to-the-trust-anchor)
-      - [Use TIR API to fetch the global trusted issuers list](#use-tir-api-to-fetch-the-global-trusted-issuers-list)
   - [Deployment of the Trust Anchor](#deployment-of-the-trust-anchor)
     - [1. Render the template](#1-render-the-template)
     - [2. Create 'trust-anchor' namespace](#2-create-trust-anchor-namespace)
     - [3. Install the Trust Anchor](#3-install-the-trust-anchor)
-    - [4. Apply rendered templates](#4-apply-rendered-templates)
+    - [(Alternatively) Apply rendered templates](#alternatively-apply-rendered-templates)
+  - [Usage](#usage)
+    - [Use TIL API to register a participant to the Trust Anchor](#use-til-api-to-register-a-participant-to-the-trust-anchor)
+    - [Use TIR API to fetch the global trusted issuers list](#use-tir-api-to-fetch-the-global-trusted-issuers-list)
   - [Uninstall](#uninstall)
+  - [Appendix](#appendix)
+    - [Errors](#errors)
+      - [Application of rendered templates fails](#application-of-rendered-templates-fails)
 
 ## Introduction
 
@@ -98,23 +102,6 @@ trusted-issuers-list:
     name: tirdb
 ```
 
-#### Use TIL API to register a participant to the Trust Anchor
-
-```bash
-curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
-    --header 'Content-Type: application/json' \
-    --data '{
-      "did": "did:key:<PARTICIPANT-KEY>",
-      "credentials": []
-    }'
-```
-
-#### Use TIR API to fetch the global trusted issuers list
-
-```bash
-curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers
-```
-
 ## Deployment of the Trust Anchor
 
 ### 1. Render the template
@@ -150,14 +137,33 @@ helm install trust-anchor-dsc data-space-connector/trust-anchor --version 2.0.0 
 watch kubectl get pods -n trust-anchor
 ```
 
-### 4. Apply rendered templates
+### (Alternatively) Apply rendered templates
 
 If helm template was executed, this can be used to apply all files in the folder
 
 ```bash
-kubectl apply -R  -f rendered/
+kubectl apply -R -f rendered/
 
 watch kubectl get pods -n trust-anchor
+```
+
+## Usage
+
+### Use TIL API to register a participant to the Trust Anchor
+
+```bash
+curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "did": "did:key:<PARTICIPANT-KEY>",
+      "credentials": []
+    }'
+```
+
+### Use TIR API to fetch the global trusted issuers list
+
+```bash
+curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers
 ```
 
 ## Uninstall
@@ -167,3 +173,32 @@ helm uninstall trust-anchor-dsc -n trust-anchor
 ```
 
 [Return to index](../README.MD)
+
+## Appendix
+
+### Errors
+
+#### Application of rendered templates fails
+
+The command `kubectl apply -R -f rendered/` fails with the following error:
+
+```bash
+[output truncated...]
+Error from server (Invalid): error when applying patch:
+[output truncated...]
+error when patching "rendered/trust-anchor/charts/trusted-issuers-list/templates/deployment.yaml": Deployment.apps "tir" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/instance":"trust-anchor", "app.kubernetes.io/name":"trusted-issuers-list"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
+```
+
+Solution:
+
+1. Delete the existing resource
+
+    ```bash
+    kubectl delete -R -f rendered/
+    ```
+
+2. Recreate the resource
+
+    ```bash
+    kubectl apply -R -f rendered/
+    ```

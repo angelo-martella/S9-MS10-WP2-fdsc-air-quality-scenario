@@ -13,7 +13,7 @@ vcverifier:
     verifier:
       # address of the trust anchor
       tirAddress: http://tir.127.0.0.1.nip.io:8080/
-      did: did:key:zDnaey6tXRtkBwv9yxkeqxhHTaEBnGqscpNDnTZSRP1jQ3mcW
+      did: did:key:zDnaepeB67XhrDCvmkGjUFrKhS2dRNJFXMmthW2qt5JqERnXU
     # public address of the verifier, to be provided as oid-config
     server:
       host: http://provider-verifier.127.0.0.1.nip.io:8080
@@ -114,7 +114,7 @@ odrl-pap:
   additonalEnvVars:
     # needs to know the providers identity to 
     - name: GENERAL_ORGANIZATION_DID
-      value: did:key:zDnaey6tXRtkBwv9yxkeqxhHTaEBnGqscpNDnTZSRP1jQ3mcW
+      value: did:key:zDnaepeB67XhrDCvmkGjUFrKhS2dRNJFXMmthW2qt5JqERnXU
   ingress:
     enabled: true
     hosts:

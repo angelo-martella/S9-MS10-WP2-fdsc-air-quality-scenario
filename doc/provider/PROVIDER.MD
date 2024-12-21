@@ -432,7 +432,7 @@ curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
 curl -X POST http://til-provider.127.0.0.1.nip.io:8080/issuer \
 --header 'Content-Type: application/json' \
 --data '{
-  "did": "did:key:<PROVIDER-KEY>",
+  "did": "did:key:<CONSUMER-KEY>",
   "credentials": [
     {
       "credentialsType": "OperatorCredential"
@@ -485,7 +485,7 @@ curl -s -X 'POST' http://pap-provider.127.0.0.1.nip.io:8080/policy \
       }'
 ```
 
-ENTITY-TYPE can be any entity type, such as _EnergyReport_.
+ENTITY-TYPE can be any allowed entity type, such as _EnergyReport_.
 
 ## Verify that the provider is working correctly
 
