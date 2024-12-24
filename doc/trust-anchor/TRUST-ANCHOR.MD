@@ -1,5 +1,7 @@
 # Trust Anchor
 
+[Return to index](../README.MD)
+
 ## Table of Contents
 
 - [Trust Anchor](#trust-anchor)
@@ -172,8 +174,6 @@ curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers
 helm uninstall trust-anchor-dsc -n trust-anchor
 ```
 
-[Return to index](../README.MD)
-
 ## Appendix
 
 ### Errors
@@ -202,3 +202,5 @@ Solution:
     ```bash
     kubectl apply -R -f rendered/
     ```
+
+[Return to index](../README.MD)

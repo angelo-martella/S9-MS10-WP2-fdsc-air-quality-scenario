@@ -1,8 +1,13 @@
 #!/bin/bash
 
+wallet_identity_path="wallet-identity"
+if [ ! -z "$4" ]; then
+    wallet_identity_path=$4
+fi
+
 token_endpoint=$(curl -s -X GET "$1/.well-known/openid-configuration" | jq -r '.token_endpoint')
 
-holder_did=$(cat wallet-identity/did.json | jq '.id' -r)
+holder_did=$(cat $wallet_identity_path/did.json | jq '.id' -r)
 
 verifiable_presentation="{
   \"@context\": [\"https://www.w3.org/2018/credentials/v1\"],
@@ -15,7 +20,7 @@ verifiable_presentation="{
 
 jwt_header=$(echo -n "{\"alg\":\"ES256\", \"typ\":\"JWT\", \"kid\":\"${holder_did}\"}"| base64 -w0 | sed s/\+/-/g | sed 's/\//_/g' | sed -E s/=+$//)
 payload=$(echo -n "{\"iss\": \"${holder_did}\", \"sub\": \"${holder_did}\", \"vp\": ${verifiable_presentation}}" | base64 -w0 | sed s/\+/-/g |sed 's/\//_/g' |  sed -E s/=+$//)
-signature=$(echo -n "${jwt_header}.${payload}" | openssl dgst -sha256 -binary -sign wallet-identity/private-key.pem | base64 -w0 | sed s/\+/-/g | sed 's/\//_/g' | sed -E s/=+$//)
+signature=$(echo -n "${jwt_header}.${payload}" | openssl dgst -sha256 -binary -sign $wallet_identity_path/private-key.pem | base64 -w0 | sed s/\+/-/g | sed 's/\//_/g' | sed -E s/=+$//)
 jwt="${jwt_header}.${payload}.${signature}"
 vp_token=$(echo -n ${jwt} | base64 -w0 | sed s/\+/-/g | sed 's/\//_/g' | sed -E s/=+$//)
 

@@ -13,7 +13,7 @@ vcverifier:
     verifier:
       # address of the trust anchor
       tirAddress: http://tir.127.0.0.1.nip.io:8080/
-      did: did:key:zDnaepeB67XhrDCvmkGjUFrKhS2dRNJFXMmthW2qt5JqERnXU
+      did: did:key:zDnaeqYZofUTY3ChsGh9BTHYnh3npjZdDkU8KFLPQvCHX6C18"
     # public address of the verifier, to be provided as oid-config
     server:
       host: http://provider-verifier.127.0.0.1.nip.io:8080
@@ -114,7 +114,7 @@ odrl-pap:
   additonalEnvVars:
     # needs to know the providers identity to 
     - name: GENERAL_ORGANIZATION_DID
-      value: did:key:zDnaepeB67XhrDCvmkGjUFrKhS2dRNJFXMmthW2qt5JqERnXU
+      value: did:key:zDnaeqYZofUTY3ChsGh9BTHYnh3npjZdDkU8KFLPQvCHX6C18"
   ingress:
     enabled: true
     hosts:
@@ -122,7 +122,7 @@ odrl-pap:
         paths:
           - "/"
 
-# -- Postgres datanase for ODRL-PAP
+# -- Postgres database for ODRL-PAP
 postgresql:
   primary:
     persistence:

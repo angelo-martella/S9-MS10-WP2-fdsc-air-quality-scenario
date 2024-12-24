@@ -1,5 +1,7 @@
 # Provider
 
+[Return to index](../README.MD)
+
 ## Table of Contents
 
 - [Provider](#provider)
@@ -38,6 +40,11 @@
     - [Test unauthorized access](#test-unauthorized-access)
     - [Test authorized access](#test-authorized-access)
   - [Uninstall](#uninstall)
+  - [Appendix](#appendix)
+    - [Errors](#errors)
+      - [Authentitation Mysql pod fails to start](#authentitation-mysql-pod-fails-to-start)
+      - [ODRL-PAP pod fails to start](#odrl-pap-pod-fails-to-start)
+      - [Scorpio pod fails to start](#scorpio-pod-fails-to-start)
 
 ## Introduction
 
@@ -542,5 +549,111 @@ curl -s -X GET 'http://mp-data-service.127.0.0.1.nip.io:8080/ngsi-ld/v1/entities
 ```bash
 helm uninstall provider-dsc -n provider
 ```
+
+## Appendix
+
+### Errors
+
+#### Authentitation Mysql pod fails to start
+
+Pod fails to startup with the following error:
+
+```txt
+mysqladmin: connect to server at 'localhost' failed
+error: 'Access denied for user 'root'@'localhost' (using password: YES)'
+```
+
+Quick fix: delete the `data-authentication-mysql-0` pvc in `provider`'s namespace and re-deploy the provider.
+
+1. List all pvc in namespace provider:
+
+    ```bash
+    kubectl get pvc --n provider
+    ```
+
+    (Alternatively) List all pvc
+
+    ```bash
+    kubectl get pvc --all-namespaces
+    ```
+
+2. Delete `data-authentication-mysql-0` pvc in `provider`
+
+    ```bash
+    kubectl delete pvc data-authentication-mysql-0 -n provider
+    ```
+
+3. Deploy the provider
+
+    ```bash
+    helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
+    ```
+
+#### ODRL-PAP pod fails to start
+
+ODRL-PAP fails to startup with the following error:
+
+```txt
+FATAL: password authentication failed for user "postgres"
+```
+
+Quick fix: delete the `data-postgresql-0` pvc in `provider`'s namespace and re-deploy the provider.
+
+1. List all pvc in namespace provider:
+
+    ```bash
+    kubectl get pvc --n provider
+    ```
+
+    (Alternatively) List all pvc
+
+    ```bash
+    kubectl get pvc --all-namespaces
+    ```
+
+2. Delete `data-postgresql-0` pvc in `provider`
+
+    ```bash
+    kubectl delete pvc data-postgresql-0 -n provider
+    ```
+
+3. Deploy the provider
+
+    ```bash
+    helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
+
+#### Scorpio pod fails to start
+
+Scorpio pod fails to startup with the following error:
+
+```txt
+WARN  [io.agr.pool] (agroal-11) Datasource '<default>': FATAL: password authentication failed for user "postgres"
+WARN  [org.fly.cor.int.jdb.JdbcUtils] (main) Connection error: FATAL: password authentication failed for user "postgres"
+```
+
+Quick fix: delete the `data-data-service-postgis-0` pvc in `provider`'s namespace and re-deploy the provider.
+
+1. List all pvc in namespace provider:
+
+    ```bash
+    kubectl get pvc --n provider
+    ```
+
+    (Alternatively) List all pvc
+
+    ```bash
+    kubectl get pvc --all-namespaces
+    ```
+
+2. Delete `data-data-service-postgis-0` pvc in `provider`
+
+    ```bash
+    kubectl delete pvc data-data-service-postgis-0 -n provider
+    ```
+
+3. Deploy the provider
+
+    ```bash
+    helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
 
 [Return to index](../README.MD)

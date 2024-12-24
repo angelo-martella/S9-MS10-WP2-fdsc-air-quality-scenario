@@ -1,5 +1,7 @@
 # Consumer
 
+[Return to index](../README.MD)
+
 ## Table of Contents
 
 - [Consumer](#consumer)
@@ -30,6 +32,9 @@
     - [6. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers](#6-verify-that-the-consumer-has-been-registered-correctly-by-querying-the-trust-anchors-til-api-to-fetch-the-list-of-the-issuers)
   - [Verify that the consumer is working correctly](#verify-that-the-consumer-is-working-correctly)
   - [Uninstall](#uninstall)
+  - [Appendix](#appendix)
+    - [Errors](#errors)
+      - [keycloak pod fails to authenticate to postgres](#keycloak-pod-fails-to-authenticate-to-postgres)
 
 ## Introduction
 
@@ -453,8 +458,6 @@ curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
 curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers
 ```
 
-The credential can be decoded at <https://jwt.io/>.
-
 ## Verify that the consumer is working correctly
 
 Use the script `get_credential_for_consumer.sh` to get a credential from the deployed and registered consumer.
@@ -463,10 +466,44 @@ Use the script `get_credential_for_consumer.sh` to get a credential from the dep
 export USER_CREDENTIAL=$(./scripts/get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo ${USER_CREDENTIAL}
 ```
 
+The credential can be decoded at <https://jwt.io/>.
+
 ## Uninstall
 
 ```bash
 helm uninstall consumer-dsc -n consumer
 ```
+
+## Appendix
+
+### Errors
+
+#### keycloak pod fails to authenticate to postgres
+
+Quick fix: delete the `data-postgreql-0` pvc in `consumer`'s namespace and re-deploy the consumer.
+
+1. List all pvc in namespace consumer:
+
+    ```bash
+    kubectl get pvc --n consumer
+    ```
+
+    (Alternatively) List all pvc
+
+    ```bash
+    kubectl get pvc --all-namespaces
+    ```
+
+2. Delete `data-postgreql-0` pvc in `consumer`
+
+    ```bash
+    kubectl delete pvc data-postgresql-0 -n consumer
+    ```
+
+3. Deploy the consumer
+
+    ```bash
+    helm install consumer-dsc data-space-connector/data-space-connector --version 7.17.0 -f consumer/values.yaml --namespace=consumer
+    ```
 
 [Return to index](../README.MD)
