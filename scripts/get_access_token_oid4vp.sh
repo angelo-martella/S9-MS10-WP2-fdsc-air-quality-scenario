@@ -24,10 +24,12 @@ signature=$(echo -n "${jwt_header}.${payload}" | openssl dgst -sha256 -binary -s
 jwt="${jwt_header}.${payload}.${signature}"
 vp_token=$(echo -n ${jwt} | base64 -w0 | sed s/\+/-/g | sed 's/\//_/g' | sed -E s/=+$//)
 
-echo $(curl -s -X POST $token_endpoint \
+access_token=$(curl -s -X POST $token_endpoint \
       --header 'Accept: */*' \
       --header 'Content-Type: application/x-www-form-urlencoded' \
       --data grant_type=vp_token \
       --data client_id=data-service \
       --data vp_token=${vp_token} \
-      --data scope=$3 | jq '.access_token' -r )
+      --data scope=$3 | jq '.access_token' -r)
+
+echo $access_token

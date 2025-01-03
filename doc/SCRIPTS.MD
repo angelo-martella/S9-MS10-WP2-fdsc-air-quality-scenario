@@ -13,6 +13,7 @@
   - [Provider deployment](#provider-deployment)
     - [Example: provider certificate.conf](#example-provider-certificateconf)
   - [Wallet identity creation](#wallet-identity-creation)
+    - [Generating credentials](#generating-credentials)
   - [Cleanup script](#cleanup-script)
 
 ## k3s cluster deployment
@@ -70,10 +71,10 @@ If it is not passed, the script proceeds non interactively to generate a certifi
 The file `consumer/.certificate.conf` includes the following configuration:
 
 ```conf
-COUNTRY="DE"
-STATE="Hamburg"
-LOCALITY="Hamburg"
-ORGNAME="FIWARE"
+COUNTRY="BE"
+STATE="BRUSSELS"
+LOCALITY="Brussels"
+ORGNAME="Fancy Marketplace Co."
 ORGUNIT="Consumer"
 ```
 
@@ -108,10 +109,10 @@ If it is not passed, the script proceeds non interactively to generate a certifi
 The file `provider/.certificate.conf` includes the following configuration:
 
 ```conf
-COUNTRY="IT"
-STATE="Lecce"
-LOCALITY="Lecce"
-ORGNAME="Unisalento"
+COUNTRY="DE"
+STATE="Saxony"
+LOCALITY="Dresden"
+ORGNAME="M&P Operations Inc."
 ORGUNIT="Provider"
 ```
 
@@ -126,14 +127,30 @@ Run the script `04.deploy_provider.s` with the proper path to the conf file.
 By running the script `05.create_wallet.sh`, it is possible to create a wallet for the user that will interact with the data provider on behalf of the consumer.
 
 ```bash
-[source] ./05.create_wallet.sh [-c user-credential]
+[source] ./05.create_wallet.sh -c user-credential [-p wallet-path -s scope]
 ```
 
-The user credential can be either passed as argument following the `-c` option, or through the `USER_CREDENTIAL` environment variable set after the deployment of the consumer (thus omitting the `-c` option in this case).
+The user credential can be either passed as argument following the `-c` option. Similarly, following the option `-p` it is possible to specify the root directory where the wallet will be created (defaults to *PROJECT_HOME*). Eventually, with the option is `-s`, the scope of the user to be authorized can be specified, which can be either **user** or **operator**, according to the scopes defined at *scorpio/ccs/oidcScopes* in provider's values.yaml (defaults to *user*).
 
 The script can be sourced to export the exchanged access token into the `ACCESS_TOKEN` environment variable, or executed normally. In the latter case, the export command is returned on the console.
 
 The resulting token can then be embedded as bearer token in the authorization header of the HTTP requests to the data provider.
+
+### Generating credentials
+
+A required argument is the credential of the user or operator that intends to act on behalf of the consumer.
+
+To get the UserCredential:
+
+```bash
+export USER_CREDENTIAL=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo ${USER_CREDENTIAL}
+```
+
+Similarly, to get the OperatorCredential:
+
+```bash
+export OPERATOR_CREDENTIAL=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo ${OPERATOR_CREDENTIAL}
+```
 
 ## Cleanup script
 

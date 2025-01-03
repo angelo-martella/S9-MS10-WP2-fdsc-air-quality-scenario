@@ -149,11 +149,18 @@ mysql:
 ```yaml
 # -- apisix configuration
 apisix:
+  # -- enable log level debug
+  image:
+    debug: true
   dataPlane:
     # -- configure the ingress to the data service
     ingress:
       enabled: true
-      hostname: mp-data-service.127.0.0.1.nip.io 
+      hostname: mp-data-service.127.0.0.1.nip.io
+      # -- configure the ingress to the tmf-api
+      extraHosts:
+        - name: mp-tmf-api.127.0.0.1.nip.io
+          path: /
   catchAllRoute:
     enabled: false
   routes: <ROUTES>
@@ -214,6 +221,43 @@ Central route to the dataservice
       ssl_verify: false
       discovery: http://verifier:3000/services/data-service/.well-known/openid-configuration
     # request decisions at opa
+    opa:
+      host: "http://localhost:8181"
+      policy: policy/main
+      with_body: true
+```
+
+Route to answer all openid-config requests to the TMForum API from within the verifier
+
+```yaml
+- uri: /.well-known/openid-configuration
+  host: mp-tmf-api.127.0.0.1.nip.io
+  upstream:
+    nodes:
+      verifier:3000: 1
+    type: roundrobin
+  plugins:
+    proxy-rewrite:
+      uri: /services/tmf-api/.well-known/openid-configuration
+```
+
+Central route to the TMForum API
+
+```yaml
+- uri: /*
+  host: mp-tmf-api.127.0.0.1.nip.io
+  upstream:
+    nodes:
+      tm-forum-api:8080: 1
+    type: roundrobin
+  plugins:
+    openid-connect:
+      bearer_only: true
+      use_jwks: true
+      client_id: contract-management
+      client_secret: unused
+      ssl_verify: false
+      discovery: http://verifier:3000/services/tmf-api/.well-known/openid-configuration
     opa:
       host: "http://localhost:8181"
       policy: policy/main
@@ -301,6 +345,11 @@ postgis:
 ```yaml
 # tmforum apis to support contracting
 tm-forum-api:
+  registration:
+    ccs:
+      defaultOidcScope:
+        credentialType: UserCredential
+        trustedParticipantsLists: http://tir.trust-anchor.svc.cluster.local:8080
   ingress:
     enabled: true
     hosts:

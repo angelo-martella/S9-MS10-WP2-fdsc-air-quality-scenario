@@ -30,7 +30,7 @@ if [ -f $PUBLIC_KEY ]; then
     echo "Public key already exists"
 else
     echo "Generating public key for the private key..."
-    openssl ec -in consumer-identity/private-key.pem -pubout -out $PUBLIC_KEY
+    openssl ec -in $PRIVATE_KEY -pubout -out $PUBLIC_KEY
 fi
 
 # certificate
@@ -49,12 +49,15 @@ else
 
     # verify the certificate configuration file, if provided
     while getopts ':c:' opt; do
+        echo $opt
+        echo $OPTARG
         case $opt in
             c)
                 if [ -f "$OPTARG" ]; then
                     source $OPTARG
                     echo "Certificate configuration file $OPTARG loaded."
                 else
+                    echo "Certificate configuration file $OPTARG not found."
                     break
                 fi
                 ;;
@@ -65,17 +68,19 @@ else
     done
 
     subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT"
-    openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj $subject
+    openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj "$subject"
 fi
 
 # keystore
 if [ -f $KEYSTORE ]; then
-    echo "Keystore already exported. Verifying content..."
-    keytool -v -keystore $KEYSTORE -list -alias didPrivateKey -storepass test
+    echo "Keystore already exported."
 else
     echo "Exporting keystore..."
     openssl pkcs12 -export -inkey $PRIVATE_KEY -in $CERTIFICATE -out $KEYSTORE -name didPrivateKey -passout pass:test
 fi
+
+echo "Verifying keystore content..."
+keytool -v -keystore $KEYSTORE -list -alias didPrivateKey -storepass test
 
 # did key
 if [ -f $DID_KEY ]; then
@@ -115,14 +120,14 @@ watch kubectl get pods -n consumer
 
 echo -e "*** Consumer deployed! ***\n"
 
-echo -e "Next steps:\n. Get an operator credential for the consumer and export it to USER_CREDENTIAL"
+echo -e "Next steps:\nObtain a valid credential for the consumer and export it to USER_CREDENTIAL"
 
 cat <<EOF
 Next steps:
 1. Register the Consumer at the Trust Anchor
   - The consumer DID key is $consumer_did_key
   - Trusted Issuers List API URL: http://til.127.0.0.1.nip.io:8080/issuer
-2. Get an operator credential for the consumer and export it to USER_CREDENTIAL
+2. Get an user credential for the consumer and export it to USER_CREDENTIAL
   - Run the following command:
       export USER_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo \${USER_CREDENTIAL}
 EOF

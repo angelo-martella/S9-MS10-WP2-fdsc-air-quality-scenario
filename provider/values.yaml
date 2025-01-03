@@ -10,10 +10,12 @@ vcverifier:
         paths:
           - "/"
   deployment:
+    logging:
+      level: DEBUG
     verifier:
       # address of the trust anchor
       tirAddress: http://tir.127.0.0.1.nip.io:8080/
-      did: did:key:zDnaeqYZofUTY3ChsGh9BTHYnh3npjZdDkU8KFLPQvCHX6C18"
+      did: did:key:zDnaeR4uurPaCJtcK875DidzbiyXYNBet4vgACZma1ZeLDYE6"
     # public address of the verifier, to be provided as oid-config
     server:
       host: http://provider-verifier.127.0.0.1.nip.io:8080
@@ -51,11 +53,17 @@ mysql:
 # -- APISIX - PEP
 # -- apisix configuration
 apisix:
+  image:
+    debug: true
   dataPlane:
     # -- configure the ingress to the data service
     ingress:
       enabled: true
-      hostname: mp-data-service.127.0.0.1.nip.io 
+      hostname: mp-data-service.127.0.0.1.nip.io
+      # -- configure the ingress to the tmf-api
+      extraHosts:
+        - name: mp-tmf-api.127.0.0.1.nip.io
+          path: /
   catchAllRoute:
     enabled: false
   routes: |-
@@ -103,6 +111,35 @@ apisix:
           host: "http://localhost:8181"
           policy: policy/main
           with_body: true
+    
+    - uri: /.well-known/openid-configuration
+      host: mp-tmf-api.127.0.0.1.nip.io
+      upstream:
+        nodes:
+          verifier:3000: 1
+        type: roundrobin
+      plugins:
+        proxy-rewrite:
+          uri: /services/tmf-api/.well-known/openid-configuration
+
+    - uri: /*
+      host: mp-tmf-api.127.0.0.1.nip.io
+      upstream:
+        nodes:
+          tm-forum-api:8080: 1
+        type: roundrobin
+      plugins:
+        openid-connect:
+          bearer_only: true
+          use_jwks: true
+          client_id: contract-management
+          client_secret: unused
+          ssl_verify: false
+          discovery: http://verifier:3000/services/tmf-api/.well-known/openid-configuration
+        opa:
+          host: "http://localhost:8181"
+          policy: policy/main
+          with_body: true
 
 # -- Open Policy Agent - PDP
 opa:
@@ -114,7 +151,7 @@ odrl-pap:
   additonalEnvVars:
     # needs to know the providers identity to 
     - name: GENERAL_ORGANIZATION_DID
-      value: did:key:zDnaeqYZofUTY3ChsGh9BTHYnh3npjZdDkU8KFLPQvCHX6C18"
+      value: did:key:zDnaeR4uurPaCJtcK875DidzbiyXYNBet4vgACZma1ZeLDYE6"
   ingress:
     enabled: true
     hosts:
@@ -165,6 +202,11 @@ postgis:
 
 # -- TMForum APIs to support contracting
 tm-forum-api:
+  registration:
+    ccs:
+      defaultOidcScope:
+        credentialType: UserCredential
+        trustedParticipantsLists: http://tir.trust-anchor.svc.cluster.local:8080
   ingress:
     enabled: true
     hosts:

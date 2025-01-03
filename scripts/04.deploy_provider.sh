@@ -30,7 +30,7 @@ if [ -f $PUBLIC_KEY ]; then
     echo "Public key already exists"
 else
     echo "Generating public key for the private key..."
-    openssl ec -in provider-identity/private-key.pem -pubout -out $PUBLIC_KEY
+    openssl ec -in $PRIVATE_KEY -pubout -out $PUBLIC_KEY
 fi
 
 # certificate
@@ -65,17 +65,19 @@ else
     done
 
     subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT"
-    openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj $subject
+    openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj "$subject"
 fi
 
 # keystore
 if [ -f $KEYSTORE ]; then
-    echo "Keystore already exported. Verifying content..."
-    keytool -v -keystore $KEYSTORE -list -alias didPrivateKey -storepass test
+    echo "Keystore already exported."
 else
     echo "Exporting keystore..."
     openssl pkcs12 -export -inkey $PRIVATE_KEY -in $CERTIFICATE -out $KEYSTORE -name didPrivateKey -passout pass:test
 fi
+
+echo "Verifying keystore content..."
+keytool -v -keystore $KEYSTORE -list -alias didPrivateKey -storepass test
 
 # did key
 if [ -f $DID_KEY ]; then
@@ -110,7 +112,7 @@ kubectl create secret generic provider-identity --from-file=$KEYSTORE -n provide
 echo "Deploying the provider..."
 helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f $provider_root/values.yaml --namespace=provider
 
-kubectl wait pod --selector=job-name!='tmf-api-registration' --all --for=condition=Ready -n provider --timeout=300s && kill -INT $(pidof watch) 2>/dev/null &
+kubectl wait pod --selector=job-name!='tmf-api-registration' --all --for=condition=Ready -n provider --timeout=300s &>/dev/null && kill -INT $(pidof watch) 2>/dev/null &
 watch kubectl get pods -n provider
 
 echo -e "*** Provider deployed! ***\n"
