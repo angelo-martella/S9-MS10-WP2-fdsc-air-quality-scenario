@@ -22,7 +22,37 @@ vcverifier:
     # access to the internal credentials-config-service
     configRepo:
       configEndpoint: http://credentials-config-service:8080
-
+    # # alternative configuration for the verifier
+    # alternativeConfig: /alternative-conf/server.yaml
+    # additionalVolumes:
+    #   - name: did-material
+    #     emptyDir: {}
+    #   - name: alternative-conf
+    #     emptyDir: {}
+    # additionalVolumeMounts:
+    #   - name: alternative-conf
+    #     mountPath: /alternative-conf
+    # initContainers:
+    #   - name: get-did
+    #     image: ubuntu
+    #     command:
+    #       - /bin/bash
+    #     args:
+    #       - -ec
+    #       - |
+    #         #!/bin/bash
+    #         apt-get -y update; apt-get -y install wget; apt-get -y install gettext-base
+    #         cd /did-material
+    #         export DID="did:key:zDnaewg3h1sDdMYGhpXmnrstZXFYrXEERMAmjHbxQcvorANAe"
+    #         cp /original-conf/server.yaml /alternative-conf/server.yaml
+    #         envsubst < /alternative-conf/server.yaml
+    #     volumeMounts:
+    #       - name: did-material
+    #         mountPath: /did-material
+    #       - name: config-volume
+    #         mountPath: /original-conf
+    #       - name: alternative-conf
+    #         mountPath: /alternative-conf
 
 # -- Credentials Config Service
 credentials-config-service:
