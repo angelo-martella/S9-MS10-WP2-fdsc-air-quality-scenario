@@ -112,8 +112,10 @@ keycloak:
 
   extraVolumeMounts:
     - name: did-material
-      mountPath: /did-material/cert.pfx
-      subPath: cert.pfx
+      mountPath: /did-material
+    - name: did-material
+      mountPath: "/etc/env"
+      readOnly: true
     - name: realms
       mountPath: /opt/bitnami/keycloak/data/import
 
@@ -463,7 +465,7 @@ curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers
 Use the script `get_credential_for_consumer.sh` to get a credential from the deployed and registered consumer.
 
 ```bash
-export USER_CREDENTIAL=$(./scripts/get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo ${USER_CREDENTIAL}
+export USER_CREDENTIAL=$(./scripts/get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo ${USER_CREDENTIAL}
 ```
 
 The credential can be decoded at <https://jwt.io/>.

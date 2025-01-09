@@ -364,6 +364,8 @@ tm-forum-api:
 # contract management component and the credential type it should register for a bought service
 contract-management:
   enabled: true
+  til:
+    credentialType: OperatorCredential
 ```
 
 ### Data Space Config

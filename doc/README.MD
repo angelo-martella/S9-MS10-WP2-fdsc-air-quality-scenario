@@ -74,12 +74,9 @@ The creation of access token for a given user credential returns `null`.
 
 This can be caused by a misconfiguration of the DID keys included in the participants' `values.yaml` files. Another potential issue is the incorrect registration of the participants at the Trust Anchor. Lastly, it is possible that the **scope** of the requested token is not recognized/configured in the FDSC instance, or that the user credential was created for a different scope.
 
-Beware that in the default configuration access tokens are **disposable**, meaning that they can be only *consumed* once. Thus, for each interaction with the data provider's APIs, a new access token must be generated and embedded into the request. On top of this, it is not possible to generate a new token before consuming the one that has been generated for a given request. Attempting to do it would result into a **null** response.
-
 Solution: to fix this issue, check the following conditions:
 
 * The `values.yaml` files include the correct DID keys.
 * The participants are correctly registered at the Trust Anchor before attempting to generate an access token.
 * Check the **scope** of the user credentials (*user-credential* or *operator-credential*, in the default configuration) and make sure it matches the scope of the corresponding access token request (namely *user* or *operator*)
 * Check whether the requested scope is properly configured in the keycloak realm included in the `values.yaml` file of the consumer.
-* Make sure that only one access token was generated for a given request and that any token was consumed before attempting to obtain a new one.

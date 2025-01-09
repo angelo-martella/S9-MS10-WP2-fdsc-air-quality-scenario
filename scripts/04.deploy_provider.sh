@@ -45,6 +45,7 @@ else
     LOCALITY=""
     ORGNAME=""
     ORGUNIT=""
+    COMMONNAME=""
     DAYS="365"
 
     # verify the certificate configuration file, if provided
@@ -64,7 +65,7 @@ else
         esac
     done
 
-    subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT"
+    subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT/CN=$COMMONNAME"
     openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj "$subject"
 fi
 
@@ -100,7 +101,7 @@ echo "Provider DID key: $provider_did_key"
 
 # apply provider identity to values.yaml
 echo "Applying provider identity to values.yaml..."
-sed -i "s/did:key:.*/$provider_did_key\"/g" $provider_root/values.yaml
+sed -i "s/did:key:.*\"/$provider_did_key\"/g" $provider_root/values.yaml
 
 
 echo "Creating provider namespace..."

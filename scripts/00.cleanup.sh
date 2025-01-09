@@ -14,13 +14,8 @@ echo "uninstalling Trust Anchor..."
 helm uninstall trust-anchor-dsc -n trust-anchor 2>/dev/null
 kubectl delete namespace trust-anchor
 
-echo "Removing persistent volumes..."
-kubectl delete pvc data-data-service-postgis-0 -n provider 2>/dev/null
-kubectl delete pvc data-postgresql-0 -n consumer 2>/dev/null
-kubectl delete pvc data-trust-anchor-mysql-0 -n trust-anchor 2>/dev/null
 
-
-while getopts ':f' opt; do
+while getopts ':f:p:' opt; do
     case $opt in
         f)
             volumes=$(docker ps -a --format '{{ .ID }}' | xargs -I {} docker inspect -f '{{ .Name }}{{ range .Mounts }}{{ printf "\n " }}{{ .Type }} {{ if eq .Type "bind" }}{{ .Source }}{{ end }}{{ .Name }} => {{ .Destination }}{{ end }}' {} | sed 's/ => \/.*//g' | tr -d '\n' | sed -E 's/\/k3s-maven-plugin(.*)(\/.+ ).*/\1/gm' | sed -E 's/( volume )/\n/g' | tail -n +2)
@@ -36,6 +31,13 @@ while getopts ':f' opt; do
             echo "Removing k3s-maven-plugin volumes..."
             echo $volumes | xargs -n 1 docker volume rm 2>/dev/null
             echo "k3s-maven-plugin volumes removed."
+            ;;
+        p)
+            echo "Removing persistent volumes..."
+            
+            kubectl delete pvc data-data-service-postgis-0 -n provider 2>/dev/null
+            kubectl delete pvc data-postgresql-0 -n consumer 2>/dev/null
+            kubectl delete pvc data-trust-anchor-mysql-0 -n trust-anchor 2>/dev/null
             ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2

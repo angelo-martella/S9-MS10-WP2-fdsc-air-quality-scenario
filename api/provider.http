@@ -1,0 +1,98 @@
+### File variables
+@DATA-SERVICE-HOST = mp-data-service.127.0.0.1.nip.io:8080
+@TMF-API-HOST = tm-forum-api.127.0.0.1.nip.io:8080
+@TIL-PROVIDER-HOST = til-provider.127.0.0.1.nip.io:8080
+
+
+
+## Provider's internal Trusted Issuers List API
+
+### 01. Use provider's TIL API to register a participant to the internal Trusted Issuers List
+@01_CONSUMER-DID = did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W
+
+POST http://{{TIL-PROVIDER-HOST}}/issuer
+Content-Type: application/json
+
+{
+  "did": "{{01_CONSUMER-DID}}",
+  "credentials": [
+    {
+      "credentialsType": "OperatorCredential"
+    }
+  ]
+}
+
+
+
+### 02. Unregister a consumer from the provider's internal Trusted Issuers List
+@02_CONSUMER-DID = did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W
+
+DELETE http://{{TIL-PROVIDER-HOST}}/issuer/{{02_CONSUMER-DID}}
+
+
+
+## Data service configuration
+
+### 03. Get the data space configuration
+GET http://{{DATA-SERVICE-HOST}}/.well-known/data-space-configuration
+
+
+### 04. Get the openid configuration
+GET http://{{DATA-SERVICE-HOST}}/.well-known/openid-configuration
+
+
+
+## TM Forum API
+
+### 05. Get the product specification list
+GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productSpecification
+
+
+### 06. Create a product specification
+@06_PRODUCT-NAME = M&P K8S
+@06_PRODUCT-BRAND = M&P Operations
+@06_PRODUCT-VERSION = 1.0.0
+
+POST http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productSpecification
+Content-Type: application/json;charset=utf-8
+
+{
+  "name": "{{06_PRODUCT-NAME}}",
+  "brand": "{{06_PRODUCT-BRAND}}",
+  "version": "{{06_PRODUCT-VERSION}}",
+  "lifecycleStatus": "ACTIVE"
+}
+
+
+### 07. Delete a product specification
+@07_PRODUCT-SPEC-ID = ID
+
+DELETE http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productSpecification/{{07_PRODUCT-SPEC-ID}}
+
+
+### 08. Get the product offering list
+GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering
+
+
+### 09. Create a product offering that references the product specification
+@09_PRODUCT-SPEC-ID = urn:ngsi-ld:product-specification:6ccd2395-29d4-4e02-87b7-4695c7a84cc6
+@09_OFFERING-NAME = M&P K8S Offering
+@09_OFFERING-VERSION = 1.0.0
+
+POST http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering
+Content-Type: application/json;charset=utf-8
+
+{
+  "name": "{{09_OFFERING-NAME}}",
+  "version": "{{09_OFFERING-VERSION}}",
+  "productSpecification": {
+    "id": "{{09_PRODUCT-SPEC-ID}}"
+  },
+  "lifecycleStatus": "ACTIVE"
+}
+
+
+### 10. Delete a product offering
+@10_OFFERING-ID = ID
+
+DELETE http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering/{{10_OFFERING-ID}}

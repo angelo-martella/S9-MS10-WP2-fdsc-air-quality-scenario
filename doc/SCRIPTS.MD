@@ -13,7 +13,7 @@
   - [Provider deployment](#provider-deployment)
     - [Example: provider certificate.conf](#example-provider-certificateconf)
   - [Wallet identity creation](#wallet-identity-creation)
-    - [Generating credentials](#generating-credentials)
+    - [Generating verifiable credentials](#generating-verifiable-credentials)
   - [Cleanup script](#cleanup-script)
 
 ## k3s cluster deployment
@@ -57,11 +57,12 @@ Run the script `03.deploy_consumer.sh`.
 The argument following the option `-c` is optional. If passed, it allows the script to generate a certificate non interactively using the information included in a configuration file, whose content matches the following template:
 
 ```conf
-COUNTRY=""  # 2 letter country-code (e.g DE)
-STATE=""    # state or province name
-LOCALITY="" # Locality Name (e.g. city)
-ORGNAME=""  # Organization Name (eg, company)
-ORGUNIT=""  # Organizational Unit Name (eg. section)
+COUNTRY=""    # 2 letter country-code (e.g DE)
+STATE=""      # state or province name
+LOCALITY=""   # Locality Name (e.g. city)
+ORGNAME=""    # Organization Name (eg, company)
+ORGUNIT=""    # Organizational Unit Name (eg. section)
+COMMONNAME="" # Common Name
 ```
 
 If it is not passed, the script proceeds non interactively to generate a certificate without specifying any information.
@@ -76,6 +77,7 @@ STATE="BRUSSELS"
 LOCALITY="Brussels"
 ORGNAME="Fancy Marketplace Co."
 ORGUNIT="Consumer"
+COMMONNAME="www.fancy-marketplace.biz"
 ```
 
 Run the script `03.deploy_consumer.sh` with the proper path to the conf file.
@@ -95,11 +97,12 @@ Run the script `04.deploy_provider.sh`.
 As per the consumer deployment script, the argument following the option `-c` is optional. If passed, it allows the script to generate a certificate non interactively using the information included in a configuration file, whose content matches the following template:
 
 ```conf
-COUNTRY=""  # 2 letter country-code (e.g DE)
-STATE=""    # state or province name
-LOCALITY="" # Locality Name (e.g. city)
-ORGNAME=""  # Organization Name (eg, company)
-ORGUNIT=""  # Organizational Unit Name (eg. section)
+COUNTRY=""    # 2 letter country-code (e.g DE)
+STATE=""      # state or province name
+LOCALITY=""   # Locality Name (e.g. city)
+ORGNAME=""    # Organization Name (eg, company)
+ORGUNIT=""    # Organizational Unit Name (eg. section)
+COMMONNAME="" # Common Name
 ```
 
 If it is not passed, the script proceeds non interactively to generate a certificate without specifying any information.
@@ -114,6 +117,7 @@ STATE="Saxony"
 LOCALITY="Dresden"
 ORGNAME="M&P Operations Inc."
 ORGUNIT="Provider"
+COMMONNAME="www.mp-operation.org"
 ```
 
 Run the script `04.deploy_provider.s` with the proper path to the conf file.
@@ -130,23 +134,23 @@ By running the script `05.create_wallet.sh`, it is possible to create a wallet f
 [source] ./05.create_wallet.sh -c user-credential [-p wallet-path -s scope]
 ```
 
-The user credential can be either passed as argument following the `-c` option. Similarly, following the option `-p` it is possible to specify the root directory where the wallet will be created (defaults to *PROJECT_HOME*). Eventually, with the option is `-s`, the scope of the user to be authorized can be specified, which can be either **user** or **operator**, according to the scopes defined at *scorpio/ccs/oidcScopes* in provider's values.yaml (defaults to *user*).
+The user credential can be passed as argument following the `-c` option. Similarly, following the option `-p` it is possible to specify the root directory where the wallet will be created (defaults to *PROJECT_HOME*). Eventually, with the option is `-s`, the scope of the user to be authorized can be specified, which can be either **user** or **operator**, according to the scopes defined at *scorpio/ccs/oidcScopes* in provider's values.yaml (defaults to *user*).
 
 The script can be sourced to export the exchanged access token into the `ACCESS_TOKEN` environment variable, or executed normally. In the latter case, the export command is returned on the console.
 
 The resulting token can then be embedded as bearer token in the authorization header of the HTTP requests to the data provider.
 
-### Generating credentials
+### Generating verifiable credentials
 
-A required argument is the credential of the user or operator that intends to act on behalf of the consumer.
+A required argument is the verifiable credential of the user or operator that intends to act on behalf of the consumer.
 
-To get the UserCredential:
+To get the **UserCredential**:
 
 ```bash
 export USER_CREDENTIAL=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo ${USER_CREDENTIAL}
 ```
 
-Similarly, to get the OperatorCredential:
+Similarly, to get the **OperatorCredential**:
 
 ```bash
 export OPERATOR_CREDENTIAL=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo ${OPERATOR_CREDENTIAL}
@@ -157,10 +161,12 @@ export OPERATOR_CREDENTIAL=$(./get_credential_for_consumer.sh http://keycloak-co
 Run the script `00.cleanup.sh` to uninstall the deployed pods, remove the namespaces and delete the persistent volumes.
 
 ```bash
-[source] ./00.cleanup.sh [-f]
+[source] ./00.cleanup.sh [-p -f]
 ```
 
-With the `-f` flag the script forces the disintallation of the cluster, by removing the `k3s-maven-plugin` docker container and the corresponding volumes.
+With the `-p` flag, following the uninstallation of the deployed pods, the script deletes the persistent volumes.
+
+With the `-f` flag the script forces the uninstallation of the cluster, by removing the `k3s-maven-plugin` docker container and the corresponding volumes.
 
 Additionally, the script can be sourced to restore the default system KUBECONFIG, if exists. If it is not sourced, the script will output the export command with the default path to KUBECONFIG for the user to prompt it.
 

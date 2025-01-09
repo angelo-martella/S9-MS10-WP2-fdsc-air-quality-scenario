@@ -11,7 +11,7 @@ access_token=$(curl -s -X POST "$1/realms/test-realm/protocol/openid-connect/tok
 offer_uri=$(curl -s -X GET "$1/realms/test-realm/protocol/oid4vc/credential-offer-uri?credential_configuration_id=$2" \
   --header "Authorization: Bearer ${access_token}" | jq '"\(.issuer)\(.nonce)"' -r)
 
-export pre_authorized_code=$(curl -s -X GET ${offer_uri} \
+pre_authorized_code=$(curl -s -X GET ${offer_uri} \
   --header "Authorization: Bearer ${access_token}" | jq '.grants."urn:ietf:params:oauth:grant-type:pre-authorized_code"."pre-authorized_code"' -r)
 
 credential_access_token=$(curl -s -X POST "$1/realms/test-realm/protocol/openid-connect/token" \

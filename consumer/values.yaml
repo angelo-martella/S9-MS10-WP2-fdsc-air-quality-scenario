@@ -48,12 +48,14 @@ keycloak:
       value: keycloak-consumer.127.0.0.1.nip.io
     # did of the consumer (as in ./consumer-identity/did.key)
     - name: DID
-      value: "did:key:zDnaeruURBt1fQqT5EM1jjRmvwdsRQDA8cDiKArB39YGjFFBP"
+      value: "did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W"
 
   extraVolumeMounts:
     - name: did-material
-      mountPath: /did-material/cert.pfx
-      subPath: cert.pfx
+      mountPath: /did-material
+    - name: did-material
+      mountPath: "/etc/env"
+      readOnly: true
     - name: realms
       mountPath: /opt/bitnami/keycloak/data/import
 

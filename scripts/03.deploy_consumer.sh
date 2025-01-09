@@ -45,6 +45,7 @@ else
     LOCALITY=""
     ORGNAME=""
     ORGUNIT=""
+    COMMONNAME=""
     DAYS="365"
 
     # verify the certificate configuration file, if provided
@@ -67,7 +68,7 @@ else
         esac
     done
 
-    subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT"
+    subject="/C=$COUNTRY/ST=$STATE/L=$LOCALITY/O=$ORGNAME/OU=$ORGUNIT/CN=$COMMONNAME"
     openssl req -new -x509 -key $PRIVATE_KEY -out $CERTIFICATE -days $DAYS --subj "$subject"
 fi
 
@@ -103,7 +104,7 @@ echo "Consumer DID key: $consumer_did_key"
 
 # apply consumer identity to values.yaml
 echo "Applying consumer identity to values.yaml..."
-sed -i "s/did:key:.*/$consumer_did_key\"/g" $consumer_root/values.yaml
+sed -i "s/did:key:.*\"/$consumer_did_key\"/g" $consumer_root/values.yaml
 
 
 echo "Creating consumer namespace..."
@@ -127,7 +128,7 @@ Next steps:
 1. Register the Consumer at the Trust Anchor
   - The consumer DID key is $consumer_did_key
   - Trusted Issuers List API URL: http://til.127.0.0.1.nip.io:8080/issuer
-2. Get an user credential for the consumer and export it to USER_CREDENTIAL
+2. Get a verifiable credential for the consumer and export it to USER_CREDENTIAL
   - Run the following command:
-      export USER_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo \${USER_CREDENTIAL}
+      export USER_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo \${USER_CREDENTIAL}
 EOF
