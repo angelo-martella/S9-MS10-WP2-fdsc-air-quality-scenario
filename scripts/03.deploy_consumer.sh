@@ -128,7 +128,7 @@ Next steps:
 1. Register the Consumer at the Trust Anchor
   - The consumer DID key is $consumer_did_key
   - Trusted Issuers List API URL: http://til.127.0.0.1.nip.io:8080/issuer
-2. Get a verifiable credential for the consumer and export it to USER_CREDENTIAL
-  - Run the following command:
-      export USER_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo \${USER_CREDENTIAL}
+2. Get user and operator verifiable credentials for the consumer
+  - export USER_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential); echo \${USER_CREDENTIAL}
+  - export OPERATOR_CREDENTIAL=\$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential); echo \${OPERATOR_CREDENTIAL}
 EOF

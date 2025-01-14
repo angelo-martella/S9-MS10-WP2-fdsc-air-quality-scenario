@@ -39,7 +39,7 @@ Authorization: Bearer {{USER_ACCESS_TOKEN}}
 #Choose an offering and extract its ID to accept it
 
 
-### 03. Choose an order
+### 03. Choose an offer and create an order for it
 # Generate an access token: 
 # ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 $USER_CREDENTIAL user ../wallet-identity
 @03_ORDER-ID = random-order-id

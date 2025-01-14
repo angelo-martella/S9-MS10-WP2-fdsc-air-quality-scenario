@@ -123,10 +123,7 @@ Next steps:
 1. Register the Provider at the Trust Anchor
   - The provider DID key is $provider_did_key
   - Trusted Issuers List API URL: http://til.127.0.0.1.nip.io:8080/issuer
-2. Configure the Provider to trust the Consumer (if the consumer is already deployed and registered)
-  - Internal Trusted Issuers List URL: http://til-provider.127.0.0.1.nip.io:8080/issuer
-  - Provide the Consumer DID key to the request body
-3. Configure and register policies to access the data
+2. Configure and register policies to access data services
   - Policy Manager API URL: http://pap-provider.127.0.0.1.nip.io:8080/policy
   - Provide the policy details in the request body
 EOF

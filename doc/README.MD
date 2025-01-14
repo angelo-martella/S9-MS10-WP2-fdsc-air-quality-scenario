@@ -40,6 +40,10 @@ An additional maintenance script called `00.cleanup.sh` allows to uninstall the 
 
 The usage of the quick deployment and cleanup scripts is detailed [here](SCRIPTS.MD).
 
+## APIs
+
+The interaction with the FDSC instance in a marketplace scenario is documented [here](MARKETPLACE.MD).
+
 ## Appendix
 
 ### Diagnosis tools

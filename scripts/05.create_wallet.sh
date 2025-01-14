@@ -3,34 +3,18 @@
 echo "*** Wallet identity creation ***"
 
 wallet_path=$(builtin cd $(pwd)/..; pwd)/wallet-identity
-scope="user"
 user_credential=""
+operator_credential=""
 
-while getopts 'c:p:s:' opt; do
+while getopts 'p:' opt; do
     echo "Option: $opt"
     echo "OPTARG: $OPTARG"
     case $opt in
-        c)
-            if [ ! -z $OPTARG ]; then
-                user_credential=$OPTARG
-            else
-                echo "No user credential argument provided."
-                return 1
-            fi
-            ;;
         p)
             if [ ! -z $OPTARG ] && [ -d $OPTARG ]; then
                 wallet_path=$(cd $OPTARG; pwd)
             else
                 echo "No wallet path provided."
-                return 1
-            fi
-            ;;
-        s)
-            if [ ! -z $OPTARG ]; then
-                scope=$OPTARG
-            else
-                echo "No scope argument provided."
                 return 1
             fi
             ;;
@@ -41,31 +25,45 @@ while getopts 'c:p:s:' opt; do
     esac
 done
 
-if [ -z $user_credential ]; then
-    echo "No user credential provided."
-    return 1
-fi
-
 echo "Preparing wallet identity (identity of the user that acts on behalf of the consumer)..."
 mkdir -p "$wallet_path"
 chmod o+rw "$wallet_path"
 
-docker run -v $wallet_path:/cert quay.io/wi_stefan/did-helper:0.1.1 | grep -o 'did:key:.*' > $wallet_path/did.key
+docker run -v $wallet_path:/cert quay.io/wi_stefan/did-helper:0.1.1
 
-echo -e "\nUser credential:\n$user_credential\n"
-echo -e "Wallet path: $wallet_path\n"
-echo -e "Scope: $scope\n"
+echo -e "\nIssuing verifiable credential for USER"
 
-echo "Exchanging access token..."
-access_token=$(./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 $user_credential $scope $wallet_path)
+user_credential=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 user-credential)
+
 
 if $(return 0 2>/dev/null); then
-    echo "Exporting ACCESS_TOKEN..."
-    export ACCESS_TOKEN=$access_token
-    echo -e "Access token:\n$ACCESS_TOKEN\n"
+    echo "Exporting USER_CREDENTIAL..."
+    export USER_CREDENTIAL=$user_credential
+    echo -e "User credential:\n$USER_CREDENTIAL\n"
 else
-    echo -e "Access token generated. You can export it by running\n\nexport ACCESS_TOKEN=$access_token\n"
+    echo -e "User credential issued. You can export it by running\n\nexport USER_CREDENTIAL=$user_credential\n"
+fi
+
+echo "\nIssuing verifiable credential for OPERATOR"
+
+operator_credential=$(./get_credential_for_consumer.sh http://keycloak-consumer.127.0.0.1.nip.io:8080 operator-credential)
+
+
+if $(return 0 2>/dev/null); then
+    echo "Exporting OPERATOR_CREDENTIAL..."
+    export OPERATOR_CREDENTIAL=$operator_credential
+    echo -e "Operator credential:\n$USER_CREDENTIAL\n"
+else
+    echo -e "Operator credential issued. You can export it by running\n\nexport OPERATOR_CREDENTIAL=$operator_credential\n"
 fi
 
 echo -e "\n*** Wallet identity created! ***"
-echo -e "Now it is possible to embed the access token as bearer token in the Authorization header of the HTTP requests to the Data Provider."
+
+cat <<EOF
+Now it is possible to create and embed access tokenn as bearer token in the Authorization header of the HTTP requests to the Data Provider.
+Next steps:
+1. Generate an access token for the USER running the following command
+    ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 \$USER_CREDENTIAL user $wallet_path
+2. Similarly, generate an access token for the OPERATOR as follows
+    ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 \$OPERATOR_CREDENTIAL operator $wallet_path
+EOF

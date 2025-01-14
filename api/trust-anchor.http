@@ -9,7 +9,7 @@
 GET http://{{TIR-HOST}}/v4/issuers
 
 
-### 02. Use TIL API to register a participant to the Trust Anchor
+### 02. Use TIL API to register a consumer participant to the Trust Anchor
 POST http://{{TIL-HOST}}/issuer
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 
-### 03. Use TIL API to register a participant to the Trust Anchor
+### 03. Use TIL API to register a provider participant to the Trust Anchor
 POST http://{{TIL-HOST}}/issuer
 Content-Type: application/json
 

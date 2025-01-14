@@ -69,7 +69,7 @@ If it is not passed, the script proceeds non interactively to generate a certifi
 
 ### Example: consumer certificate.conf
 
-The file `consumer/.certificate.conf` includes the following configuration:
+The file `consumer/.certificate.conf` contains the following configuration:
 
 ```conf
 COUNTRY="BE"
@@ -109,7 +109,7 @@ If it is not passed, the script proceeds non interactively to generate a certifi
 
 ### Example: provider certificate.conf
 
-The file `provider/.certificate.conf` includes the following configuration:
+The file `provider/.certificate.conf` contains the following configuration:
 
 ```conf
 COUNTRY="DE"
@@ -120,10 +120,10 @@ ORGUNIT="Provider"
 COMMONNAME="www.mp-operation.org"
 ```
 
-Run the script `04.deploy_provider.s` with the proper path to the conf file.
+Run the script `04.deploy_provider.sh` with the proper path to the conf file.
 
 ```bash
-./04.deploy_provider.s -c ../provider/.certificate.conf
+./04.deploy_provider.sh -c ../provider/.certificate.conf
 ```
 
 ## Wallet identity creation
@@ -131,12 +131,14 @@ Run the script `04.deploy_provider.s` with the proper path to the conf file.
 By running the script `05.create_wallet.sh`, it is possible to create a wallet for the user that will interact with the data provider on behalf of the consumer.
 
 ```bash
-[source] ./05.create_wallet.sh -c user-credential [-p wallet-path -s scope]
+[source] ./05.create_wallet.sh [-p wallet-path]
 ```
 
-The user credential can be passed as argument following the `-c` option. Similarly, following the option `-p` it is possible to specify the root directory where the wallet will be created (defaults to *PROJECT_HOME*). Eventually, with the option is `-s`, the scope of the user to be authorized can be specified, which can be either **user** or **operator**, according to the scopes defined at *scorpio/ccs/oidcScopes* in provider's values.yaml (defaults to *user*).
+With the option `-p` it is possible to specify the root directory where the wallet will be created (defaults to *PROJECT_HOME/wallet-identity*).
 
-The script can be sourced to export the exchanged access token into the `ACCESS_TOKEN` environment variable, or executed normally. In the latter case, the export command is returned on the console.
+The script supports the issuance of verifiable credentials for **USER** and **OPERATOR** scopes, according to the scopes defined at *scorpio/ccs/oidcScopes* in provider's values.yaml.
+
+The script can be sourced to export the issued verified credentials as the `USER_CREDENTIAL` and `OPERATOR_CREDENTIAL` environment variables, or executed normally. In the latter case, the export commands are returned on the console.
 
 The resulting token can then be embedded as bearer token in the authorization header of the HTTP requests to the data provider.
 
