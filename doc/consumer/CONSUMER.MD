@@ -1,6 +1,6 @@
 # Consumer
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)
 
 ## Table of Contents
 
@@ -508,4 +508,4 @@ Quick fix: delete the `data-postgreql-0` pvc in `consumer`'s namespace and re-de
     helm install consumer-dsc data-space-connector/data-space-connector --version 7.17.0 -f consumer/values.yaml --namespace=consumer
     ```
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)

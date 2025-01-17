@@ -1,6 +1,6 @@
 # Trust Anchor
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)
 
 ## Table of Contents
 
@@ -203,4 +203,4 @@ Solution:
     kubectl apply -R -f rendered/
     ```
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)

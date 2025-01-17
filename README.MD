@@ -1,10 +1,10 @@
 # FIWARE Data Space Connector technical docs
 
-[Trust Anchor](trust-anchor/TRUST-ANCHOR.MD)
+[Trust Anchor](doc/trust-anchor/TRUST-ANCHOR.MD)
 
-[Data Consumer](consumer/CONSUMER.MD)
+[Data Consumer](doc/consumer/CONSUMER.MD)
 
-[Data Provider](provider/PROVIDER.MD)
+[Data Provider](doc/provider/PROVIDER.MD)
 
 ## Setup k3s cluster
 
@@ -38,11 +38,11 @@ The whole setup and deployment of the FDSC instance presented in this documentat
 
 An additional maintenance script called `00.cleanup.sh` allows to uninstall the environment and even purge the cluster, if necessary.
 
-The usage of the quick deployment and cleanup scripts is detailed [here](SCRIPTS.MD).
+The usage of the quick deployment and cleanup scripts is detailed [here](doc/SCRIPTS.MD).
 
 ## APIs
 
-The interaction with the FDSC instance in a marketplace scenario is documented [here](MARKETPLACE.MD).
+The interaction with the FDSC instance in a marketplace scenario is documented [here](doc/MARKETPLACE.MD).
 
 ## Appendix
 

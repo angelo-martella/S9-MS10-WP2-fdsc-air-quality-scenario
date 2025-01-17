@@ -1,6 +1,6 @@
 # Marketplace operations
 
-[Return to index](./README.MD)
+[Return to index](../README.MD)
 
 ## Table of contents
 
@@ -425,4 +425,4 @@ When setting a policy assignee to filter requests based on given user `vc:role` 
 
 Quick fix: set the policy assignee constraint to `vc:type`.
 
-[Return to index](./README.MD)
+[Return to index](../README.MD)

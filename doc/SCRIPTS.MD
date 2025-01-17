@@ -1,6 +1,6 @@
 # Scripts usage guide
 
-[Return to index](./README.MD)
+[Return to index](../README.MD)
 
 ## Table of Contents
 
@@ -172,4 +172,4 @@ With the `-f` flag the script forces the uninstallation of the cluster, by remov
 
 Additionally, the script can be sourced to restore the default system KUBECONFIG, if exists. If it is not sourced, the script will output the export command with the default path to KUBECONFIG for the user to prompt it.
 
-[Return to index](./README.MD)
+[Return to index](./doc/README.MD)

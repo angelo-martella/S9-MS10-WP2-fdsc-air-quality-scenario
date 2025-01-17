@@ -1,6 +1,6 @@
 # Provider
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)
 
 ## Table of Contents
 
@@ -707,4 +707,4 @@ Quick fix: delete the `data-data-service-postgis-0` pvc in `provider`'s namespac
     ```bash
     helm install provider-dsc data-space-connector/data-space-connector --version 7.17.0 -f provider/values.yaml --namespace=provider
 
-[Return to index](../README.MD)
+[Return to index](../../README.MD)
