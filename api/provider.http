@@ -75,7 +75,7 @@ GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering
 
 
 ### 09. Create a product offering that references the product specification
-@09_PRODUCT-SPEC-ID = urn:ngsi-ld:product-specification:6ccd2395-29d4-4e02-87b7-4695c7a84cc6
+@09_PRODUCT-SPEC-ID = urn:ngsi-ld:product-specification:4d22ad6e-bb45-4603-9424-d6aa3868a7b7
 @09_OFFERING-NAME = M&P K8S Offering
 @09_OFFERING-VERSION = 1.0.0
 

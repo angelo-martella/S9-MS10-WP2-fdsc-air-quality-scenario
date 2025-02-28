@@ -11,7 +11,7 @@ This repository contains technical notes to develop DSBA TC compliant data space
   - [Appendix](#appendix)
     - [Diagnosis tools](#diagnosis-tools)
       - [List pods running in a given NAMESPACE](#list-pods-running-in-a-given-namespace)
-      - [Show logs of a POD runnin in a given NAMESPACE](#show-logs-of-a-pod-runnin-in-a-given-namespace)
+      - [Show logs of a POD running in a given NAMESPACE](#show-logs-of-a-pod-running-in-a-given-namespace)
     - [Errors](#errors)
       - [Enable storage failed](#enable-storage-failed)
       - [Unable to generate access token](#unable-to-generate-access-token)
@@ -72,7 +72,7 @@ The interaction with the FDSC instance in a marketplace scenario is documented [
 kubectl get pods -n <NAMESPACE>
 ```
 
-#### Show logs of a POD runnin in a given NAMESPACE
+#### Show logs of a POD running in a given NAMESPACE
 
 ```bash
 kubectl logs <POD> -n <NAMESPACE>

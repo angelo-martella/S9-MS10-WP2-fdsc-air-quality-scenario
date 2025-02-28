@@ -60,7 +60,7 @@ fi
 echo -e "\n*** Wallet identity created! ***"
 
 cat <<EOF
-Now it is possible to create and embed access tokenn as bearer token in the Authorization header of the HTTP requests to the Data Provider.
+Now it is possible to create and embed access token as bearer token in the Authorization header of the HTTP requests to the Data Provider.
 Next steps:
 1. Generate an access token for the USER running the following command
     ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 \$USER_CREDENTIAL user $wallet_path

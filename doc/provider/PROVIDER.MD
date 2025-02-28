@@ -266,7 +266,7 @@ Central route to the TMForum API
 
 #### Open Policy Agent (OPA) - PDP
 
-The OPA is deployed as part of the connector (in particular, as sidecar of APISIX), fulfullig the role of PDP.
+The OPA is deployed as part of the connector (in particular, as sidecar of APISIX), fulfillig the role of PDP.
 
 ```yaml
 opa:
