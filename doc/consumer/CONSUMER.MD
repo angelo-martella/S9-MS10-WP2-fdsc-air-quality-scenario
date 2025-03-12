@@ -28,8 +28,8 @@
     - [3. Create 'consumer' namespace](#3-create-consumer-namespace)
     - [4. Deploy the key into the cluster](#4-deploy-the-key-into-the-cluster)
     - [5. Install the consumer](#5-install-the-consumer)
-    - [5. Register the consumer at the Trust Anchor](#5-register-the-consumer-at-the-trust-anchor)
-    - [6. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers](#6-verify-that-the-consumer-has-been-registered-correctly-by-querying-the-trust-anchors-til-api-to-fetch-the-list-of-the-issuers)
+    - [6. Register the consumer at the Trust Anchor](#6-register-the-consumer-at-the-trust-anchor)
+    - [7. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers](#7-verify-that-the-consumer-has-been-registered-correctly-by-querying-the-trust-anchors-til-api-to-fetch-the-list-of-the-issuers)
   - [Verify that the consumer is working correctly](#verify-that-the-consumer-is-working-correctly)
   - [Uninstall](#uninstall)
   - [Appendix](#appendix)
@@ -443,7 +443,7 @@ watch kubectl get pods -n consumer
 
 The issuer can be accessed at: <http://keycloak-consumer.127.0.0.1.nip.io:8080/realms/test-realm/account/oid4vci>
 
-### 5. Register the consumer at the Trust Anchor
+### 6. Register the consumer at the Trust Anchor
 
 ```bash
 curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
@@ -454,7 +454,7 @@ curl -X POST http://til.127.0.0.1.nip.io:8080/issuer \
 }'
 ```
 
-### 6. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers
+### 7. Verify that the consumer has been registered correctly by querying the Trust Anchor's TIL API to fetch the list of the issuers
 
 ```bash
 curl -X GET http://tir.127.0.0.1.nip.io:8080/v4/issuers

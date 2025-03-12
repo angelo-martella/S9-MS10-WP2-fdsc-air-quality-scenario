@@ -19,7 +19,8 @@
       - [Open Policy Agent (OPA) - PDP](#open-policy-agent-opa---pdp)
       - [ODRL-PAP](#odrl-pap)
       - [Postgres database for ODRL-PAP](#postgres-database-for-odrl-pap)
-      - [Scorpio - Data Service](#scorpio---data-service)
+    - [Data Service](#data-service)
+      - [Context Broker - Scorpio](#context-broker---scorpio)
       - [Postgis database for Scorpio](#postgis-database-for-scorpio)
     - [TMForum API](#tmforum-api)
       - [TMForum APIs to support contracting](#tmforum-apis-to-support-contracting)
@@ -52,11 +53,11 @@ Includes **authentication** and **authorization** components to manage access to
 
 ![alt text](img/01.png)
 
-**Authentication** services are registered and connected to the **Verifiable Data Registry** include:
+**Authentication** services are registered and connected to the **Verifiable Data Registry**, and include:
 
 - A **Verifiable Credential Verifier (VCVerifier)** that provides OID4VP endpoints
-- A _internal_ **Trusted Issuers List** (which differs from the global one managed by the Verifiable Data Registry) and a **Credentials Config Service**, to provide information about issuers and credentials for the verifier.
-- **MySql** acts as Storage Backend (can be a shared instance)
+- An _internal_ **Trusted Issuers List** (which differs from the global one managed by the Verifiable Data Registry) and a **Credentials Config Service**, to provide information about issuers and credentials for the verifier.
+- **MySql** acts as Storage Backend (can be a shared instance).
 
 Naturally, as per the consumer, identity and key material for the organization have to be created and registered.
 
@@ -202,7 +203,7 @@ Route to provider data-space-configuration
           content-type: application/json
 ```
 
-Central route to the dataservice
+Central route to the data service
 
 ```yaml
 - uri: /*
@@ -302,7 +303,9 @@ postgresql:
       storageClass: local-path
 ```
 
-#### Scorpio - Data Service
+### Data Service
+
+#### Context Broker - Scorpio
 
 ```yaml
 scorpio:
