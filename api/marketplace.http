@@ -25,7 +25,7 @@ Authorization: Bearer {{USER_ACCESS_TOKEN}}
     ]
 }
 
-# Marketplace ID: urn:ngsi-ld:organization:99d0f62e-70d6-4a6d-ae9c-fab86e045f3e
+# Take note of Marketplace ID in the response body
 
 ## Buy access
 
@@ -43,8 +43,8 @@ Authorization: Bearer {{USER_ACCESS_TOKEN}}
 # Generate an access token: 
 # ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 $USER_CREDENTIAL user ../wallet-identity
 @03_ORDER-ID = random-order-id
-@03_OFFER-ID = urn:ngsi-ld:product-offering:4d6b5a47-9909-4d23-98a6-ecf29de5b925
-@03_MARKETPLACE-ID = urn:ngsi-ld:organization:31374114-3db6-4adc-86e6-1dd59b196242
+@03_OFFER-ID = urn:ngsi-ld:product-offering:85bdab14-a502-4f08-a9da-6e06971f6388
+@03_MARKETPLACE-ID = urn:ngsi-ld:organization:00efb6bb-9b1e-4d4f-ab93-9ef218bcbc2d
 
 POST http://{{MP_TMF_API_HOST}}/tmf-api/productOrderingManagement/v4/productOrder
 Accept: */*

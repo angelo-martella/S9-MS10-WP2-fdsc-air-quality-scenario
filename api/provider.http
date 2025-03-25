@@ -8,7 +8,7 @@
 ## Provider's internal Trusted Issuers List API
 
 ### 01. Use provider's TIL API to register a participant to the internal Trusted Issuers List
-@01_CONSUMER-DID = did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W
+@01_CONSUMER-DID = DID
 
 POST http://{{TIL-PROVIDER-HOST}}/issuer
 Content-Type: application/json
@@ -23,9 +23,8 @@ Content-Type: application/json
 }
 
 
-
 ### 02. Unregister a consumer from the provider's internal Trusted Issuers List
-@02_CONSUMER-DID = did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W
+@02_CONSUMER-DID = DID
 
 DELETE http://{{TIL-PROVIDER-HOST}}/issuer/{{02_CONSUMER-DID}}
 
@@ -75,7 +74,7 @@ GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering
 
 
 ### 09. Create a product offering that references the product specification
-@09_PRODUCT-SPEC-ID = urn:ngsi-ld:product-specification:4d22ad6e-bb45-4603-9424-d6aa3868a7b7
+@09_PRODUCT-SPEC-ID = ID
 @09_OFFERING-NAME = M&P K8S Offering
 @09_OFFERING-VERSION = 1.0.0
 

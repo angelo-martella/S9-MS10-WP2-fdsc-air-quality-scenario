@@ -1,8 +1,26 @@
 # FIWARE Data Space Connector development notes
 
+![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square)
+
 This repository contains technical notes to develop DSBA TC compliant data space instances using FIWARE Data Space Connector (FDSC). A comprehensive overview of the FDSC can be found at the original [repository](https://github.com/FIWARE/data-space-connector).
 
+## Maintainers
+
+| Name | Email |
+| ---- | ------ |
+| cristianmartella | <cristian.martella@unisalento.it> |
+
+## Source Code
+
+* <https://github.com/cristianmartella/fdsc-scenario-01>
+* <https://github.com/FIWARE/data-space-connector>
+
+## Table of Contents
+
 - [FIWARE Data Space Connector development notes](#fiware-data-space-connector-development-notes)
+  - [Maintainers](#maintainers)
+  - [Source Code](#source-code)
+  - [Table of Contents](#table-of-contents)
   - [Components overview](#components-overview)
   - [Setup k3s cluster](#setup-k3s-cluster)
     - [Enable storage](#enable-storage)
@@ -48,11 +66,11 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisione
 
 The whole setup and deployment of the FDSC instance presented in this documentation can be streamlined by using the quick deployment scripts located in the script folder:
 
-- 01.deploy_cluster.sh
-- 02.deploy_trust_anchor.sh
-- 03.deploy_consumer.sh
-- 04.deploy_provider.sh
-- 05.create_wallet.sh
+* 01.deploy_cluster.sh
+* 02.deploy_trust_anchor.sh
+* 03.deploy_consumer.sh
+* 04.deploy_provider.sh
+* 05.create_wallet.sh
 
 An additional maintenance script called `00.cleanup.sh` allows to uninstall the environment and even purge the cluster, if necessary.
 
@@ -98,7 +116,7 @@ This can be caused by a misconfiguration of the DID keys included in the partici
 
 Solution: to fix this issue, check the following conditions:
 
-- The `values.yaml` files include the correct DID keys.
-- The participants are correctly registered at the Trust Anchor before attempting to generate an access token.
-- Check the **scope** of the user credentials (*user-credential* or *operator-credential*, in the default configuration) and make sure it matches the scope of the corresponding access token request (namely *user* or *operator*)
-- Check whether the requested scope is properly configured in the keycloak realm included in the `values.yaml` file of the consumer.
+* The `values.yaml` files include the correct DID keys.
+* The participants are correctly registered at the Trust Anchor before attempting to generate an access token.
+* Check the **scope** of the user credentials (*user-credential* or *operator-credential*, in the default configuration) and make sure it matches the scope of the corresponding access token request (namely *user* or *operator*)
+* Check whether the requested scope is properly configured in the keycloak realm included in the `values.yaml` file of the consumer.
