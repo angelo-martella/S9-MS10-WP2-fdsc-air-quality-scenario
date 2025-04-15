@@ -1,6 +1,6 @@
 # FIWARE Data Space Connector development notes
 
-![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square)
+![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational)
 
 This repository contains technical notes to develop DSBA TC compliant data space instances using FIWARE Data Space Connector (FDSC). A comprehensive overview of the FDSC can be found at the original [repository](https://github.com/FIWARE/data-space-connector).
 
