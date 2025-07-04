@@ -48,7 +48,7 @@ keycloak:
       value: keycloak-consumer.127.0.0.1.nip.io
     # did of the consumer (as in ./consumer-identity/did.key)
     - name: DID
-      value: "did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W"
+      value: "did:key:zDnaeZKY42tWs792rJ4FgkAkQTyEA7hjgKG1mGCvq891azpnm"
 
   extraVolumeMounts:
     - name: did-material

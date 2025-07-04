@@ -1,5 +1,5 @@
 ### File variables
-@DATA-SERVICE-HOST = mp-data-service.127.0.0.1.nip.io:8080
+@DATA-SERVICE-HOST = ml-data-service.127.0.0.1.nip.io:8080
 @TMF-API-HOST = tm-forum-api.127.0.0.1.nip.io:8080
 @TIL-PROVIDER-HOST = til-provider.127.0.0.1.nip.io:8080
 
@@ -8,19 +8,19 @@
 ## Provider's internal Trusted Issuers List API
 
 ### 01. Use provider's TIL API to register a participant to the internal Trusted Issuers List
-@01_CONSUMER-DID = DID
+#@01_CONSUMER-DID = DID
 
-POST http://{{TIL-PROVIDER-HOST}}/issuer
-Content-Type: application/json
+# POST http://{{TIL-PROVIDER-HOST}}/issuer
+# Content-Type: application/json
 
-{
-  "did": "{{01_CONSUMER-DID}}",
-  "credentials": [
-    {
-      "credentialsType": "OperatorCredential"
-    }
-  ]
-}
+# {
+#   "did": "{{01_CONSUMER-DID}}",
+#   "credentials": [
+#     {
+#       "credentialsType": "OperatorCredential"
+#     }
+#   ]
+# }
 
 
 ### 02. Unregister a consumer from the provider's internal Trusted Issuers List
@@ -48,8 +48,8 @@ GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productSpecifica
 
 
 ### 06. Create a product specification
-@06_PRODUCT-NAME = M&P K8S
-@06_PRODUCT-BRAND = M&P Operations
+@06_PRODUCT-NAME = AQ Monitoring
+@06_PRODUCT-BRAND = AirQuality
 @06_PRODUCT-VERSION = 1.0.0
 
 POST http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productSpecification
@@ -74,8 +74,8 @@ GET http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering
 
 
 ### 09. Create a product offering that references the product specification
-@09_PRODUCT-SPEC-ID = ID
-@09_OFFERING-NAME = M&P K8S Offering
+@09_PRODUCT-SPEC-ID = urn:ngsi-ld:product-specification:69481a9b-739b-42a8-bf8c-db8b8a3a1f78
+@09_OFFERING-NAME = AirQuality Offering
 @09_OFFERING-VERSION = 1.0.0
 
 POST http://{{TMF-API-HOST}}/tmf-api/productCatalogManagement/v4/productOffering

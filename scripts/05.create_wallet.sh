@@ -63,7 +63,7 @@ cat <<EOF
 Now it is possible to create and embed access token as bearer token in the Authorization header of the HTTP requests to the Data Provider.
 Next steps:
 1. Generate an access token for the USER running the following command
-    ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 \$USER_CREDENTIAL user $wallet_path
+    ./get_access_token_oid4vp.sh http://ml-data-service.127.0.0.1.nip.io:8080 \$USER_CREDENTIAL user $wallet_path
 2. Similarly, generate an access token for the OPERATOR as follows
-    ./get_access_token_oid4vp.sh http://mp-data-service.127.0.0.1.nip.io:8080 \$OPERATOR_CREDENTIAL operator $wallet_path
+    ./get_access_token_oid4vp.sh http://ml-data-service.127.0.0.1.nip.io:8080 \$OPERATOR_CREDENTIAL operator $wallet_path
 EOF

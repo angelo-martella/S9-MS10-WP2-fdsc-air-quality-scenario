@@ -13,7 +13,10 @@ DELETE http://{{PAP-HOST}}/policy/{{02_POLICY-ID}}
 
 
 ### 03. Create a policy to allow any participant to read entities of a given type
-@03_ENTITY-TYPE = EnergyReport
+
+#AM-TODO
+@03_ENTITY-TYPE = AirQualityObserved
+
 @03_ODRL-ASSIGNEE = vc:any
 @03_ODRL-ACTION = odrl:read
 
@@ -29,11 +32,11 @@ Content-Type: application/json
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
-    "@id": "https://mp-operation.org/policy/common/type",
+    "@id": "https://mlid.org/policy/common/type",
     "@type": "odrl:Policy",
     "odrl:permission": {
         "odrl:assigner": {
-            "@id": "https://www.mp-operation.org/"
+            "@id": "https://www.mlid.org/"
         },
         "odrl:target": {
             "@type": "odrl:AssetCollection",
@@ -76,11 +79,11 @@ Content-Type: application/json
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
-    "@id": "https://mp-operation.org/policy/common/type",
+    "@id": "https://mlid.org/policy/common/type",
     "@type": "odrl:Policy",
     "odrl:permission": {
         "odrl:assigner": {
-            "@id": "https://www.mp-operation.org/"
+            "@id": "https://www.mlid.org/"
         },
         "odrl:target": {
             "@type": "odrl:AssetCollection",
@@ -123,11 +126,11 @@ Content-Type: application/json
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
-    "@id": "https://mp-operation.org/policy/common/type",
+    "@id": "https://mlid.org/policy/common/type",
     "@type": "odrl:Policy",
     "odrl:permission": {
         "odrl:assigner": {
-            "@id": "https://www.mp-operation.org/"
+            "@id": "https://www.mlid.org/"
         },
         "odrl:target": {
             "@type": "odrl:AssetCollection",
@@ -170,11 +173,11 @@ Content-Type: application/json
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
-    "@id": "https://mp-operation.org/policy/common/type",
+    "@id": "https://mlid.org/policy/common/type",
     "@type": "odrl:Policy",
     "odrl:permission": {
         "odrl:assigner": {
-            "@id": "https://www.mp-operation.org/"
+            "@id": "https://www.mlid.org/"
         },
         "odrl:target": {
             "@type": "odrl:AssetCollection",
@@ -201,7 +204,7 @@ Content-Type: application/json
 
 
 ### 07. Allow the creation of entities of a given type to authenticated participants with a given verifiable credentials type
-@07_ENTITY-TYPE = K8SCluster
+@07_ENTITY-TYPE = AirQualityObserved
 @07_ODRL-ACTION = odrl:use
 @07_VC-TYPE = OperatorCredential
 
@@ -217,11 +220,11 @@ Content-Type: application/json
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
-    "@id": "https://mp-operation.org/policy/common/type",
+    "@id": "https://mlid.org/policy/common/type",
     "@type": "odrl:Policy",
     "odrl:permission": {
         "odrl:assigner": {
-            "@id": "https://www.mp-operation.org/"
+            "@id": "https://www.mlid.org/"
         },
         "odrl:target": {
             "@type": "odrl:AssetCollection",
@@ -259,144 +262,3 @@ Content-Type: application/json
         }
     }
 }
-
-
-### test (not working)
-# @07_ENTITY-TYPE = K8SCluster
-# @07_ODRL-ACTION = odrl:use
-# @07_VC-ROLE = OPERATOR
-
-# POST http://{{PAP-HOST}}/policy
-# Content-Type: application/json
-
-# {
-#     "@context": {
-#         "dc": "http://purl.org/dc/elements/1.1/",
-#         "dct": "http://purl.org/dc/terms/",
-#         "owl": "http://www.w3.org/2002/07/owl#",
-#         "odrl": "http://www.w3.org/ns/odrl/2/",
-#         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-#         "skos": "http://www.w3.org/2004/02/skos/core#"
-#     },
-#     "@id": "https://mp-operation.org/policy/common/type",
-#     "@type": "odrl:Policy",
-#     "odrl:permission": {
-#         "odrl:assigner": {
-#             "@id": "https://www.mp-operation.org/"
-#         },
-#         "odrl:target": {
-#             "@type": "odrl:AssetCollection",
-#             "odrl:source": "urn:asset",
-#             "odrl:refinement": [
-#                 {
-#                     "@type": "odrl:Constraint",
-#                     "odrl:leftOperand": "ngsi-ld:entityType",
-#                     "odrl:operator": {
-#                         "@id": "odrl:eq"
-#                     },
-#                     "odrl:rightOperand": "{{07_ENTITY-TYPE}}"
-#                 }
-#             ]
-#         },
-#         "odrl:assignee": {
-#             "@type": "odrl:PartyCollection",
-#             "odrl:source": "urn:user",
-#             "odrl:refinement": {
-#                 "@type": "odrl:Constraint",
-#                 "odrl:leftOperand": {
-#                     "@id": "vc:role"
-#                 },
-#                 "odrl:operator": {
-#                     "@id": "odrl:hasPart"
-#                 },
-#                 "odrl:rightOperand": {
-#                     "@value": "{{07_VC-ROLE}}",
-#                     "@type": "xsd:string"
-#                 }
-#             }
-#         },
-#         "odrl:action": {
-#             "@id": "{{07_ODRL-ACTION}}"
-#         }
-#     }
-# }
-
-
-### test (not working)
-# @07_ENTITY-TYPE = K8SCluster
-# @07_ODRL-ACTION = odrl:use
-# @07_VC-ROLE = OPERATOR
-# @07_VC-TYPE = OperatorCredential
-
-# POST http://{{PAP-HOST}}/policy
-# Content-Type: application/json
-
-# {
-#     "@context": {
-#         "dc": "http://purl.org/dc/elements/1.1/",
-#         "dct": "http://purl.org/dc/terms/",
-#         "owl": "http://www.w3.org/2002/07/owl#",
-#         "odrl": "http://www.w3.org/ns/odrl/2/",
-#         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-#         "skos": "http://www.w3.org/2004/02/skos/core#"
-#     },
-#     "@id": "https://mp-operation.org/policy/common/type",
-#     "@type": "odrl:Policy",
-#     "odrl:permission": {
-#         "odrl:assigner": {
-#             "@id": "https://www.mp-operation.org/"
-#         },
-#         "odrl:target": {
-#             "@type": "odrl:AssetCollection",
-#             "odrl:source": "urn:asset",
-#             "odrl:refinement": [
-#                 {
-#                     "@type": "odrl:Constraint",
-#                     "odrl:leftOperand": "ngsi-ld:entityType",
-#                     "odrl:operator": {
-#                         "@id": "odrl:eq"
-#                     },
-#                     "odrl:rightOperand": "{{07_ENTITY-TYPE}}"
-#                 }
-#             ]
-#         },
-#         "odrl:assignee": {
-#             "@type": "odrl:PartyCollection",
-#             "odrl:source": "urn:user",
-#             "odrl:refinement": {
-#                 "@type": "odrl:LogicalConstraint",
-#                 "odrl:and": [
-#                     {
-#                         "@type": "odrl:Constraint",
-#                         "odrl:leftOperand": {
-#                             "@id": "vc:role"
-#                         },
-#                         "odrl:operator": {
-#                             "@id": "odrl:hasPart"
-#                         },
-#                         "odrl:rightOperand": {
-#                             "@value": "{{07_VC-ROLE}}",
-#                             "@type": "xsd:string"
-#                         }
-#                     },
-#                     {
-#                         "@type": "odrl:Constraint",
-#                         "odrl:leftOperand": {
-#                             "@id": "vc:type"
-#                         },
-#                         "odrl:operator": {
-#                             "@id": "odrl:hasPart"
-#                         },
-#                         "odrl:rightOperand": {
-#                             "@value": "{{07_VC-TYPE}}",
-#                             "@type": "xsd:string"
-#                         }
-#                     }
-#                 ]
-#             }
-#         },
-#         "odrl:action": {
-#             "@id": "{{07_ODRL-ACTION}}"
-#         }
-#     }
-# }

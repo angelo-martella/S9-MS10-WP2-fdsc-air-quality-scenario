@@ -1,8 +1,8 @@
 ### File variables
 @TIL-HOST = til.127.0.0.1.nip.io:8080
 @TIR-HOST = tir.127.0.0.1.nip.io:8080
-@CONSUMER-DID = did:key:zDnaeyQTvVFBeK2hM33puL5DTR71c2xwaAtFgqB8zh925pb2W
-@PROVIDER-DID = did:key:zDnaewg3h1sDdMYGhpXmnrstZXFYrXEERMAmjHbxQcvorANAe
+@CONSUMER-DID = did:key:zDnaeZKY42tWs792rJ4FgkAkQTyEA7hjgKG1mGCvq891azpnm
+@PROVIDER-DID = did:key:zDnaenYXxi8ojyDTma7XBLam54veRLMy2essdJtLWZgZsfq9K
 
 
 ### 01. Use TIR API to fetch the global trusted issuers list
